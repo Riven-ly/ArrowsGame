@@ -1,0 +1,22 @@
+# Unity���Ļ��棨������ԣ�����㵱ǰ�����⣩
+Library/
+# Unity��ʱ�ļ�
+Temp/
+Obj/
+
+# ���˱༭�����ã���ͬ�����߲�һ����
+UserSettings/
+# ��־�ļ�
+Logs/
+
+# �����װ������ѡ�������ύ���ļ���
+*.apk
+*.aab
+*.exe
+*.ipa
+.vs/
+*.suo
+# ϵͳ��ʱ�ļ�
+.DS_Store
+Thumbs.db
+Git_Mahjong/NUL
