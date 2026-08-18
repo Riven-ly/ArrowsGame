@@ -19,7 +19,7 @@ public class GoldCollectEffect : MonoBehaviour
     }
     private void Start()
     {
-        for (int i = 0; i < num * 3; i++)
+        for (int i = 0; i < num; i++)
         {
             GameObject go = Instantiate(glodPrefab, transform);
             go.transform.position = gameObject.transform.position;
@@ -58,18 +58,9 @@ public class GoldCollectEffect : MonoBehaviour
 
         }
 
-        int cntIndex = 0;
         for (int i = 0; i < temList.Count; i++)
         {
-            if(!temList[i].gameObject.activeSelf)
-            {
-                temList[i].FlyGold(start, target, (cntIndex + 1) * 0.1f);
-                cntIndex++;
-                if (cntIndex == 10)
-                {
-                    break;
-                }
-            }
+            temList[i].FlyGold(start, target, (i + 1) * 0.1f);
         }
 
         //ÉùÒôµþ¼ÓÆÆÒô
