@@ -30,7 +30,7 @@ public class SnakeGameController : MonoBehaviour
         {
             view = GetComponent<SnakeGameView>();
         }
-        model = CreateExampleLevel();
+        model = CreateLevelFromPlayerLevel();
         isMoving = false;
         inputEnabled = true;
         movingSnakeIds.Clear();
@@ -177,45 +177,106 @@ public class SnakeGameController : MonoBehaviour
         return true;
     }
 
-    /// <summary>创建 9×13 棋盘上的十二条示例蛇。</summary>
-    private SnakeGameModel CreateExampleLevel()
+    /// <summary>根据玩家等级加载关卡配置。</summary>
+    private SnakeGameModel CreateLevelFromPlayerLevel()
     {
-        SnakeGameModel result = new SnakeGameModel(9, 13);
-        AddSnake(result, 0, SnakeGameModel.SnakeType.Type0, new Vector2Int(2, 11), new Vector2Int(1, 11), new Vector2Int(0, 11), new Vector2Int(0, 10));
-        AddSnake(result, 1, SnakeGameModel.SnakeType.Type1, new Vector2Int(5, 11), new Vector2Int(4, 11), new Vector2Int(3, 11), new Vector2Int(3, 10));
-        AddSnake(result, 2, SnakeGameModel.SnakeType.Type2, new Vector2Int(0, 8), new Vector2Int(0, 7), new Vector2Int(1, 7), new Vector2Int(1, 6));
-        AddSnake(result, 3, SnakeGameModel.SnakeType.Type3, new Vector2Int(2, 7), new Vector2Int(2, 6), new Vector2Int(3, 6), new Vector2Int(3, 5));
-        AddSnake(result, 4, SnakeGameModel.SnakeType.Type4, new Vector2Int(4, 8), new Vector2Int(3, 8), new Vector2Int(3, 9), new Vector2Int(2, 9));
-        AddSnake(result, 5, SnakeGameModel.SnakeType.Type5, new Vector2Int(6, 8), new Vector2Int(6, 9), new Vector2Int(5, 9), new Vector2Int(5, 10));
-        AddSnake(result, 6, SnakeGameModel.SnakeType.Type6, new Vector2Int(8, 7), new Vector2Int(7, 7), new Vector2Int(7, 8), new Vector2Int(8, 8));
-        AddSnake(result, 7, SnakeGameModel.SnakeType.Type7, new Vector2Int(1, 3), new Vector2Int(1, 4), new Vector2Int(2, 4), new Vector2Int(2, 5));
-        AddSnake(result, 8, SnakeGameModel.SnakeType.Type8, new Vector2Int(4, 3), new Vector2Int(3, 3), new Vector2Int(2, 3), new Vector2Int(2, 2));
-        AddSnake(result, 9, SnakeGameModel.SnakeType.Type9, new Vector2Int(7, 3), new Vector2Int(7, 4), new Vector2Int(6, 4), new Vector2Int(6, 5));
-        AddSnake(result, 10, SnakeGameModel.SnakeType.Type10, new Vector2Int(8, 1), new Vector2Int(7, 1), new Vector2Int(7, 2), new Vector2Int(6, 2));
-        AddSnake(result, 11, SnakeGameModel.SnakeType.Type11, new Vector2Int(3, 0), new Vector2Int(3, 1), new Vector2Int(4, 1), new Vector2Int(4, 2));
+        int level = GameManager.Instance.playerInfo.level;
+        if (level > 1000)
+        {
+            level = UnityEngine.Random.Range(501, 1001);
+        }
+        TextAsset levelAsset = Resources.Load<TextAsset>("Level/lv" + level);
+        SnakeLevelConfig config = JsonUtility.FromJson<SnakeLevelConfig>(levelAsset.text);
+        SnakeGameModel result = new SnakeGameModel(config.size.x, config.size.y);
+        for (int i = 0; i < config.arrows.Count; i++)
+        {
+            List<Vector2Int> cells = ExpandNodes(config.arrows[i].nodes);
+            cells.Reverse();
+            SnakeGameModel.SnakeData snake = new SnakeGameModel.SnakeData
+            {
+                id = i,
+                type = GetSnakeType(config.arrows[i].color),
+                direction = GetHeadDirection(cells.ToArray())
+            };
+            snake.cells.AddRange(cells);
+            result.snakes.Add(snake);
+        }
         return result;
+    }
+
+    /// <summary>将配置关键点展开为连续棋盘格。</summary>
+    private List<Vector2Int> ExpandNodes(List<SnakeLevelNode> nodes)
+    {
+        List<Vector2Int> cells = new List<Vector2Int>();
+        cells.Add(nodes[0].ToCell());
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            Vector2Int current = cells[cells.Count - 1];
+            Vector2Int target = nodes[i].ToCell();
+            Vector2Int offset = new Vector2Int(Mathf.Clamp(target.x - current.x, -1, 1), Mathf.Clamp(target.y - current.y, -1, 1));
+            while (current != target)
+            {
+                current += offset;
+                cells.Add(current);
+            }
+        }
+        return cells;
+    }
+
+    /// <summary>将配置颜色名称映射到蛇图片类型。</summary>
+    private SnakeGameModel.SnakeType GetSnakeType(string color)
+    {
+        switch (color)
+        {
+            case "None": return SnakeGameModel.SnakeType.Type0;
+            case "Yellow": return SnakeGameModel.SnakeType.Type6;
+            case "Black": return SnakeGameModel.SnakeType.Type11;
+            case "Green": return SnakeGameModel.SnakeType.Type2;
+            case "Cyan": return SnakeGameModel.SnakeType.Type8;
+            case "Blue": return SnakeGameModel.SnakeType.Type7;
+            case "Orange": return SnakeGameModel.SnakeType.Type0;
+            case "Pink": return SnakeGameModel.SnakeType.Type4;
+            case "Purple": return SnakeGameModel.SnakeType.Type5;
+            case "DarkGreen": return SnakeGameModel.SnakeType.Type10;
+            case "Red": return SnakeGameModel.SnakeType.Type11;
+            case "White": return SnakeGameModel.SnakeType.Type3;
+            case "Brown": return SnakeGameModel.SnakeType.Type0;
+            case "Lime": return SnakeGameModel.SnakeType.Type2;
+            case "DarkViolet": return SnakeGameModel.SnakeType.Type5;
+            case "Gray": return SnakeGameModel.SnakeType.Type3;
+            case "Lipstick_lightRed": return SnakeGameModel.SnakeType.Type4;
+            case "Lipstick_navilight": return SnakeGameModel.SnakeType.Type8;
+            case "Lipstick_naviDark": return SnakeGameModel.SnakeType.Type7;
+            case "Lipstick_navi": return SnakeGameModel.SnakeType.Type8;
+            case "Lipstick_darkRed": return SnakeGameModel.SnakeType.Type11;
+            case "Lipstick_lightYellow": return SnakeGameModel.SnakeType.Type6;
+            case "Lipstick_red": return SnakeGameModel.SnakeType.Type4;
+            case "Lipstick_navipale": return SnakeGameModel.SnakeType.Type3;
+            case "JPPink": return SnakeGameModel.SnakeType.Type4;
+            case "JPBlue": return SnakeGameModel.SnakeType.Type7;
+            case "JPYellow": return SnakeGameModel.SnakeType.Type6;
+            case "JPCyan": return SnakeGameModel.SnakeType.Type8;
+            case "JPGreen": return SnakeGameModel.SnakeType.Type2;
+            case "JPDarkGreen": return SnakeGameModel.SnakeType.Type10;
+            case "JPViolet": return SnakeGameModel.SnakeType.Type5;
+            case "JPBlack": return SnakeGameModel.SnakeType.Type11;
+        }
+        return SnakeGameModel.SnakeType.Type0;
     }
 
     /// <summary>根据蛇头和第二节身体计算蛇头朝向。</summary>
     private SnakeGameModel.MoveDirection GetHeadDirection(Vector2Int[] cells)
     {
         Vector2Int offset = cells[0] - cells[1];
-        if (offset.x > 0) return SnakeGameModel.MoveDirection.Right;
-        if (offset.x < 0) return SnakeGameModel.MoveDirection.Left;
-        if (offset.y > 0) return SnakeGameModel.MoveDirection.Up;
+        int x = Mathf.Clamp(offset.x, -1, 1);
+        int y = Mathf.Clamp(offset.y, -1, 1);
+        if (x > 0 && y > 0) return SnakeGameModel.MoveDirection.UpRight;
+        if (x < 0 && y > 0) return SnakeGameModel.MoveDirection.UpLeft;
+        if (x > 0 && y < 0) return SnakeGameModel.MoveDirection.DownRight;
+        if (x < 0 && y < 0) return SnakeGameModel.MoveDirection.DownLeft;
+        if (x > 0) return SnakeGameModel.MoveDirection.Right;
+        if (x < 0) return SnakeGameModel.MoveDirection.Left;
+        if (y > 0) return SnakeGameModel.MoveDirection.Up;
         return SnakeGameModel.MoveDirection.Down;
-    }
-
-    /// <summary>向关卡模型添加一条蛇。</summary>
-    private void AddSnake(SnakeGameModel target, int id, SnakeGameModel.SnakeType type, params Vector2Int[] cells)
-    {
-        SnakeGameModel.SnakeData snake = new SnakeGameModel.SnakeData
-        {
-            id = id,
-            type = type,
-            direction = GetHeadDirection(cells)
-        };
-        snake.cells.AddRange(cells);
-        target.snakes.Add(snake);
     }
 }

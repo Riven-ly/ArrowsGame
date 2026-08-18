@@ -100,6 +100,8 @@ MonoBehaviour:
   bottomBoundary: {fileID: 3353404041735719021}
   leftBoundary: {fileID: 3212196975991154430}
   rightBoundary: {fileID: 5103829052881850825}
+  partBaseWidth: 100
+  partBaseHeight: 100
 --- !u!114 &3138177605569419336
 MonoBehaviour:
   m_ObjectHideFlags: 0

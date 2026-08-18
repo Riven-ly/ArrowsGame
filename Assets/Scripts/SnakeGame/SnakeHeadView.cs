@@ -37,6 +37,10 @@ public class SnakeHeadView : MonoBehaviour
             case SnakeGameModel.MoveDirection.Up: return 90f;
             case SnakeGameModel.MoveDirection.Down: return -90f;
             case SnakeGameModel.MoveDirection.Left: return 180f;
+            case SnakeGameModel.MoveDirection.UpRight: return 45f;
+            case SnakeGameModel.MoveDirection.UpLeft: return 135f;
+            case SnakeGameModel.MoveDirection.DownRight: return -45f;
+            case SnakeGameModel.MoveDirection.DownLeft: return -135f;
             default: return 0f;
         }
     }

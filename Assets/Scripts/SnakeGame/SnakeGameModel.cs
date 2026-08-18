@@ -29,7 +29,11 @@ public class SnakeGameModel
         Up,
         Down,
         Left,
-        Right
+        Right,
+        UpRight,
+        UpLeft,
+        DownRight,
+        DownLeft
     }
 
     /// <summary>一条蛇的运行时数据。</summary>
@@ -78,6 +82,10 @@ public class SnakeGameModel
             case MoveDirection.Up: return Vector2Int.up;
             case MoveDirection.Down: return Vector2Int.down;
             case MoveDirection.Left: return Vector2Int.left;
+            case MoveDirection.UpRight: return new Vector2Int(1, 1);
+            case MoveDirection.UpLeft: return new Vector2Int(-1, 1);
+            case MoveDirection.DownRight: return new Vector2Int(1, -1);
+            case MoveDirection.DownLeft: return new Vector2Int(-1, -1);
             default: return Vector2Int.right;
         }
     }

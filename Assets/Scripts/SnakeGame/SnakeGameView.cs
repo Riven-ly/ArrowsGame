@@ -50,6 +50,10 @@ public class SnakeGameView : MonoBehaviour
     private readonly Dictionary<int, SnakeVisual> visuals = new Dictionary<int, SnakeVisual>();
     /// <summary>移动单格动画时长。</summary>
     private const float StepDuration = 0.09f;
+    /// <summary>蛇部件预制体基础宽度。</summary>
+    private float partBaseWidth = 100f;
+    /// <summary>蛇部件预制体基础高度。</summary>
+    private float partBaseHeight = 100f;
     /// <summary>棋盘左右边距。</summary>
     private const float BoardPadding = 0f;
 
@@ -255,7 +259,7 @@ public class SnakeGameView : MonoBehaviour
             trace.transform.SetParent(tracesRoot, false);
             trace.name = "Trace_" + snake.id + "_" + i;
             traceRect.anchoredPosition = CellToPosition(snake.cells[i]);
-            traceRect.sizeDelta = new Vector2(CellSize(), CellSize());
+            traceRect.localScale = GetPartScale();
         }
     }
 
@@ -425,7 +429,7 @@ public class SnakeGameView : MonoBehaviour
         {
             RectTransform partRect = visual.parts[i].GetComponent<RectTransform>();
             partRect.anchoredPosition = CellToPosition(snake.cells[i]);
-            partRect.sizeDelta = new Vector2(CellSize(), CellSize());
+            partRect.localScale = GetPartScale();
         }
         UpdateFillers(visual);
     }
@@ -433,15 +437,21 @@ public class SnakeGameView : MonoBehaviour
     /// <summary>刷新补间蛇身的中点位置与尺寸。</summary>
     private void UpdateFillers(SnakeVisual visual)
     {
-        float size = CellSize();
         for (int i = 0; i < visual.fillers.Count; i++)
         {
             RectTransform previous = visual.parts[i].GetComponent<RectTransform>();
             RectTransform next = visual.parts[i + 1].GetComponent<RectTransform>();
             RectTransform filler = visual.fillers[i].GetComponent<RectTransform>();
             filler.anchoredPosition = (previous.anchoredPosition + next.anchoredPosition) * 0.5f;
-            filler.sizeDelta = new Vector2(size, size);
+            filler.localScale = GetPartScale();
         }
+    }
+
+    /// <summary>根据棋盘格尺寸和部件基础尺寸计算缩放。</summary>
+    private Vector3 GetPartScale()
+    {
+        float size = CellSize();
+        return new Vector3(size / partBaseWidth, size / partBaseHeight, 1f);
     }
 
     /// <summary>将棋盘坐标转换为 UI 局部坐标。</summary>
