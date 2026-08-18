@@ -57,10 +57,32 @@ public class SnakeGameModel
     public readonly int boardHeight;
     /// <summary>当前关卡蛇列表。</summary>
     public readonly List<SnakeData> snakes = new List<SnakeData>();
+    /// <summary>路径阻挡器数据。</summary>
+    public readonly List<WayBlockerData> wayBlockers = new List<WayBlockerData>();
+    /// <summary>黑洞数据。</summary>
+    public readonly List<BlackHoleData> blackHoles = new List<BlackHoleData>();
     /// <summary>移动前的蛇格子快照。</summary>
     public readonly List<Vector2Int> moveSnapshot = new List<Vector2Int>();
     /// <summary>本次移动每一格的完整蛇身布局。</summary>
     public readonly List<List<Vector2Int>> moveLayouts = new List<List<Vector2Int>>();
+    /// <summary>路径阻挡器运行时数据。</summary>
+    public class WayBlockerData
+    {
+        /// <summary>阻挡器坐标。</summary>
+        public Vector2Int position;
+        /// <summary>剩余存在时间。</summary>
+        public float remainingTime;
+        /// <summary>阻挡器是否仍然有效。</summary>
+        public bool active = true;
+    }
+
+    /// <summary>黑洞运行时数据。</summary>
+    public class BlackHoleData
+    {
+        /// <summary>黑洞坐标。</summary>
+        public Vector2Int position;
+    }
+
     /// <summary>创建指定尺寸的棋盘模型。</summary>
     public SnakeGameModel(int width, int height)
     {

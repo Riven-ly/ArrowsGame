@@ -16,6 +16,10 @@ public class SnakeLevelConfig
     public string name;
     /// <summary>配置中的蛇路径列表。</summary>
     public List<SnakeArrowConfig> arrows;
+    /// <summary>路径阻挡器列表。</summary>
+    public List<SnakeWayBlockerConfig> wayBlockers;
+    /// <summary>黑洞列表。</summary>
+    public List<SnakeBlackHoleConfig> blackHoles;
 }
 
 /// <summary>
@@ -40,6 +44,32 @@ public class SnakeArrowConfig
     public List<SnakeLevelNode> nodes;
     /// <summary>配置中的颜色名称。</summary>
     public string color;
+}
+
+/// <summary>
+/// 路径阻挡器配置。
+/// </summary>
+[Serializable]
+public class SnakeWayBlockerConfig
+{
+    /// <summary>阻挡器坐标。</summary>
+    public SnakeLevelNode position;
+    /// <summary>阻挡器锁定时间。</summary>
+    public float lockTime;
+    /// <summary>阻挡器尺寸字符串。</summary>
+    public string size;
+}
+
+/// <summary>
+/// 黑洞配置。
+/// </summary>
+[Serializable]
+public class SnakeBlackHoleConfig
+{
+    /// <summary>黑洞坐标。</summary>
+    public SnakeLevelNode position;
+    /// <summary>黑洞尺寸字符串。</summary>
+    public string size;
 }
 
 /// <summary>

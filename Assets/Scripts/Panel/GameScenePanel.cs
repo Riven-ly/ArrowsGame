@@ -7,14 +7,25 @@ using UnityEngine.UI;
 public class GameScenePanel : UIBase
 {
     public Transform root;
+    public Text title;
+    public Button settingBtn;
+    public Button resetBtn;
     /// <summary>蛇玩法模块控制器。</summary>
-    [SerializeField] private SnakeGameController snakeGameController;
+    public SnakeGameController snakeGameController;
     /// <summary>当前剩余生命。</summary>
     private int currentLives;
     /// <summary>面板上的三个生命图片。</summary>
     [SerializeField] private Image[] lifeImages;
     /// <summary>是否已经结束当前关卡。</summary>
     private bool isGameOver;
+    /// <summary>游戏总时长，单位为秒。</summary>
+    private float gameDuration = 600f;
+    /// <summary>剩余游戏时间文本。</summary>
+    [SerializeField] private Text gameTimeText;
+    /// <summary>蛇数量文本。</summary>
+    [SerializeField] private Text snakeCountText;
+    /// <summary>当前剩余游戏时间。</summary>
+    private float remainingGameTime;
 
     /// <summary>
     /// 初始化安全区与生命显示引用。
@@ -26,6 +37,7 @@ public class GameScenePanel : UIBase
         rect.offsetMax = new Vector2(0, -topBlockHeight);
         snakeGameController.collisionEvent += OnSnakeCollision;
         snakeGameController.victoryEvent += OnSnakeVictory;
+        snakeGameController.snakeCountChangedEvent += RefreshSnakeCount;
     }
 
     /// <summary>解除玩法事件订阅。</summary>
@@ -35,6 +47,7 @@ public class GameScenePanel : UIBase
         {
             snakeGameController.collisionEvent -= OnSnakeCollision;
             snakeGameController.victoryEvent -= OnSnakeVictory;
+            snakeGameController.snakeCountChangedEvent -= RefreshSnakeCount;
         }
     }
     /// <summary>
@@ -42,7 +55,30 @@ public class GameScenePanel : UIBase
     /// </summary>
     private void Start()
     {
-       
+        settingBtn.onClick.AddListener(() =>
+        {
+
+        });
+        resetBtn.onClick.AddListener(() =>
+        {
+            ResetGame();
+        });
+    }
+
+    /// <summary>按秒更新游戏倒计时。</summary>
+    private System.Collections.IEnumerator GameTimer()
+    {
+        while (!isGameOver && remainingGameTime > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            if (GameManager.IsGamePause) continue;
+            remainingGameTime--;
+            RefreshGameTime();
+        }
+        if (!isGameOver)
+        {
+            GameOver();
+        }
     }
 
  
@@ -53,10 +89,17 @@ public class GameScenePanel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
+        StopCoroutine("GameTimer");
+        title.text = LanguageManager.Instance.GetText("Level") + $" {GameManager.Instance.playerInfo.level}";
         currentLives = 3;
         isGameOver = false;
+        remainingGameTime = gameDuration;
         snakeGameController.Initialize();
         RefreshLifeImages();
+        RefreshGameTime();
+        RefreshSnakeCount();
+        GameManager.IsGamePause = false;
+        StartCoroutine(GameTimer());
     }
 
     /// <summary>
@@ -75,6 +118,21 @@ public class GameScenePanel : UIBase
         Refresh();
     }
 
+    /// <summary>刷新剩余时间文本。</summary>
+    private void RefreshGameTime()
+    {
+        int totalSeconds = Mathf.FloorToInt(Mathf.Max(0f, remainingGameTime));
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        gameTimeText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
+    }
+
+    /// <summary>刷新当前剩余蛇数量文本。</summary>
+    private void RefreshSnakeCount()
+    {
+        snakeCountText.text = snakeGameController.GetRemainingSnakeCount() + "/" + snakeGameController.GetTotalSnakeCount();
+    }
+
     /// <summary>处理控制器上报的碰撞并扣除生命。</summary>
     private void OnSnakeCollision()
     {
@@ -87,9 +145,7 @@ public class GameScenePanel : UIBase
         Debug.Log("蛇撞到阻挡，扣除 1 点生命并原路倒车。");
         if (currentLives <= 0)
         {
-            isGameOver = true;
-            snakeGameController.StopInput();
-            Debug.Log("蛇玩法失败：生命值归零。");
+            GameOver();
         }
     }
 
@@ -111,5 +167,12 @@ public class GameScenePanel : UIBase
         }
         isGameOver = true;
         Debug.Log("蛇玩法通关：全部蛇已经离场。");
+    }
+
+    private void GameOver()
+    {
+        isGameOver = true;
+        snakeGameController.StopInput();
+        Debug.Log("关卡失败！");
     }
 }

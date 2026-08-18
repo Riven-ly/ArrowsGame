@@ -22,10 +22,13 @@ public class SnakeGameController : MonoBehaviour
     public Action collisionEvent;
     /// <summary>通知面板全部蛇已经离场。</summary>
     public Action victoryEvent;
+    /// <summary>通知面板刷新蛇数量。</summary>
+    public Action snakeCountChangedEvent;
 
     /// <summary>初始化首版示例关卡。</summary>
     public void Initialize()
     {
+        StopAllCoroutines();
         if (view == null)
         {
             view = GetComponent<SnakeGameView>();
@@ -35,6 +38,23 @@ public class SnakeGameController : MonoBehaviour
         inputEnabled = true;
         movingSnakeIds.Clear();
         view.Build(model, OnSnakeClicked);
+    }
+
+    /// <summary>获取当前未离场蛇数量。</summary>
+    public int GetRemainingSnakeCount()
+    {
+        int count = 0;
+        for (int i = 0; i < model.snakes.Count; i++)
+        {
+            if (!model.snakes[i].removed) count++;
+        }
+        return count;
+    }
+
+    /// <summary>获取当前关卡蛇总数。</summary>
+    public int GetTotalSnakeCount()
+    {
+        return model.snakes.Count;
     }
 
     /// <summary>停止继续接受玩家输入。</summary>
@@ -85,6 +105,7 @@ public class SnakeGameController : MonoBehaviour
         {
             yield return view.PlayExit(snake, layouts);
             snake.removed = true;
+            snakeCountChangedEvent?.Invoke();
             if (AllSnakesRemoved())
             {
                 inputEnabled = false;
@@ -105,6 +126,13 @@ public class SnakeGameController : MonoBehaviour
         while (HasInsideCell(plannedCells))
         {
             Vector2Int nextHead = plannedCells[0] + offset;
+            if (IsBlackHole(nextHead))
+            {
+                for (int i = plannedCells.Count - 1; i > 0; i--) plannedCells[i] = plannedCells[i - 1];
+                plannedCells[0] = nextHead;
+                layouts.Add(new List<Vector2Int>(plannedCells));
+                return false;
+            }
             if (IsOccupiedByOtherSnake(nextHead, snake)) return true;
             for (int i = plannedCells.Count - 1; i > 0; i--) plannedCells[i] = plannedCells[i - 1];
             plannedCells[0] = nextHead;
@@ -126,12 +154,40 @@ public class SnakeGameController : MonoBehaviour
         return false;
     }
 
+    /// <summary>处理路径阻挡器到期。</summary>
+    public void OnWayBlockerExpired(Vector2Int position)
+    {
+        for (int i = 0; i < model.wayBlockers.Count; i++)
+        {
+            if (model.wayBlockers[i].position == position)
+            {
+                model.wayBlockers[i].active = false;
+                view.HideWayBlocker(position);
+                return;
+            }
+        }
+    }
+
+    /// <summary>判断坐标是否是黑洞。</summary>
+    private bool IsBlackHole(Vector2Int cell)
+    {
+        for (int i = 0; i < model.blackHoles.Count; i++)
+        {
+            if (model.blackHoles[i].position == cell) return true;
+        }
+        return false;
+    }
+
     /// <summary>判断坐标是否被其他尚未消除的蛇占据。</summary>
     private bool IsOccupiedByOtherSnake(Vector2Int cell, SnakeGameModel.SnakeData movingSnake)
     {
         if (!model.IsInside(cell))
         {
             return false;
+        }
+        for (int i = 0; i < model.wayBlockers.Count; i++)
+        {
+            if (model.wayBlockers[i].active && model.wayBlockers[i].position == cell) return true;
         }
         for (int i = 0; i < model.snakes.Count; i++)
         {
@@ -188,6 +244,23 @@ public class SnakeGameController : MonoBehaviour
         TextAsset levelAsset = Resources.Load<TextAsset>("Level/lv" + level);
         SnakeLevelConfig config = JsonUtility.FromJson<SnakeLevelConfig>(levelAsset.text);
         SnakeGameModel result = new SnakeGameModel(config.size.x, config.size.y);
+        if (config.wayBlockers == null) config.wayBlockers = new List<SnakeWayBlockerConfig>();
+        if (config.blackHoles == null) config.blackHoles = new List<SnakeBlackHoleConfig>();
+        for (int i = 0; i < config.wayBlockers.Count; i++)
+        {
+            result.wayBlockers.Add(new SnakeGameModel.WayBlockerData
+            {
+                position = config.wayBlockers[i].position.ToCell(),
+                remainingTime = config.wayBlockers[i].lockTime
+            });
+        }
+        for (int i = 0; i < config.blackHoles.Count; i++)
+        {
+            result.blackHoles.Add(new SnakeGameModel.BlackHoleData
+            {
+                position = config.blackHoles[i].position.ToCell()
+            });
+        }
         for (int i = 0; i < config.arrows.Count; i++)
         {
             List<Vector2Int> cells = ExpandNodes(config.arrows[i].nodes);

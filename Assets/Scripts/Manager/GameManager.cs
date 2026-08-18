@@ -20,6 +20,7 @@ public enum GameType
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static bool IsGamePause = false;
     public static int appATTtype = 0;
     public static bool LoadABAsyncOK = false;
 

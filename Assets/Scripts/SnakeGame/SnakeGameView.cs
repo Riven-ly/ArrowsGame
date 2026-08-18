@@ -22,6 +22,10 @@ public class SnakeGameView : MonoBehaviour
     [SerializeField] private SnakeTailView tailPrefab;
     /// <summary>蛇占格痕迹预制体。</summary>
     [SerializeField] private SnakeTraceView tracePrefab;
+    /// <summary>路径阻挡器预制体。</summary>
+    [SerializeField] private SnakeWayBlockerView wayBlockerPrefab;
+    /// <summary>黑洞预制体。</summary>
+    [SerializeField] private SnakeBlackHoleView blackHolePrefab;
     /// <summary>按蛇类型配置的头身尾图片。</summary>
     [SerializeField] private SnakeSpriteSet[] snakeSpriteSets;
     /// <summary>屏幕上边界点。</summary>
@@ -36,6 +40,12 @@ public class SnakeGameView : MonoBehaviour
     private RectTransform tracesRoot;
     /// <summary>运行时蛇节点容器。</summary>
     private RectTransform snakesRoot;
+    /// <summary>运行时障碍节点容器。</summary>
+    private RectTransform obstaclesRoot;
+    /// <summary>闲置路径阻挡器对象池。</summary>
+    private readonly List<SnakeWayBlockerView> wayBlockerPool = new List<SnakeWayBlockerView>();
+    /// <summary>闲置黑洞对象池。</summary>
+    private readonly List<SnakeBlackHoleView> blackHolePool = new List<SnakeBlackHoleView>();
     /// <summary>部件对象池根节点。</summary>
     private RectTransform poolRoot;
     /// <summary>闲置蛇头对象池。</summary>
@@ -78,6 +88,7 @@ public class SnakeGameView : MonoBehaviour
         model = gameModel;
         ClearView();
         CreateBoard();
+        CreateObstacles();
         for (int i = 0; i < model.snakes.Count; i++)
         {
             CreateSnakeTraces(model.snakes[i]);
@@ -86,6 +97,7 @@ public class SnakeGameView : MonoBehaviour
         {
             CreateSnakeVisual(model.snakes[i], clickAction);
         }
+        obstaclesRoot.SetAsLastSibling();
     }
 
     /// <summary>播放指定蛇的前进动画。</summary>
@@ -116,8 +128,9 @@ public class SnakeGameView : MonoBehaviour
         {
             yield return MoveSnakeTo(visual, snake, layouts[i]);
             HidePartsBeyondBoundary(visual, snake.direction);
+            HidePartsAtBlackHole(visual, snake);
         }
-        while (!IsTailBeyondBoundary(visual, snake.direction))
+        while (!IsTailBeyondBoundary(visual, snake.direction) && !AllPartsHidden(visual))
         {
             List<Vector2Int> nextCells = new List<Vector2Int>(snake.cells);
             Vector2Int offset = SnakeGameModel.DirectionOffset(snake.direction);
@@ -128,8 +141,52 @@ public class SnakeGameView : MonoBehaviour
             nextCells[0] += offset;
             yield return MoveSnakeTo(visual, snake, nextCells);
             HidePartsBeyondBoundary(visual, snake.direction);
+            HidePartsAtBlackHole(visual, snake);
         }
         visual.root.gameObject.SetActive(false);
+    }
+
+    /// <summary>隐藏当前已经进入黑洞格的蛇部件。</summary>
+    private void HidePartsAtBlackHole(SnakeVisual visual, SnakeGameModel.SnakeData snake)
+    {
+        for (int i = 0; i < snake.cells.Count; i++)
+        {
+            for (int j = 0; j < model.blackHoles.Count; j++)
+            {
+                if (snake.cells[i] == model.blackHoles[j].position)
+                {
+                    visual.parts[i].SetActive(false);
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < visual.fillers.Count; i++)
+        {
+            Vector2 fillerPosition = visual.fillers[i].GetComponent<RectTransform>().anchoredPosition;
+            for (int j = 0; j < model.blackHoles.Count; j++)
+            {
+                Vector2 holePosition = CellToPosition(model.blackHoles[j].position);
+                if (Vector2.Distance(fillerPosition, holePosition) <= CellSize())
+                {
+                    visual.fillers[i].SetActive(false);
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>判断头身尾是否已经全部隐藏。</summary>
+    private bool AllPartsHidden(SnakeVisual visual)
+    {
+        for (int i = 0; i < visual.parts.Count; i++)
+        {
+            if (visual.parts[i].activeSelf) return false;
+        }
+        for (int i = 0; i < visual.fillers.Count; i++)
+        {
+            if (visual.fillers[i].activeSelf) return false;
+        }
+        return true;
     }
 
     /// <summary>隐藏已经越过边界的单个蛇部件。</summary>
@@ -156,19 +213,7 @@ public class SnakeGameView : MonoBehaviour
     {
         Vector3[] corners = new Vector3[4];
         part.GetWorldCorners(corners);
-        float left = RectTransformUtility.WorldToScreenPoint(null, corners[0]).x;
-        float right = RectTransformUtility.WorldToScreenPoint(null, corners[2]).x;
-        float bottom = RectTransformUtility.WorldToScreenPoint(null, corners[0]).y;
-        float top = RectTransformUtility.WorldToScreenPoint(null, corners[2]).y;
-        Vector3 boundary = direction == SnakeGameModel.MoveDirection.Up ? topBoundary.position : direction == SnakeGameModel.MoveDirection.Down ? bottomBoundary.position : direction == SnakeGameModel.MoveDirection.Left ? leftBoundary.position : rightBoundary.position;
-        Vector2 boundaryScreen = RectTransformUtility.WorldToScreenPoint(null, boundary);
-        switch (direction)
-        {
-            case SnakeGameModel.MoveDirection.Up: return bottom > boundaryScreen.y;
-            case SnakeGameModel.MoveDirection.Down: return top < boundaryScreen.y;
-            case SnakeGameModel.MoveDirection.Left: return right < boundaryScreen.x;
-            default: return left > boundaryScreen.x;
-        }
+        return IsBeyondBoundary(corners, direction);
     }
 
     /// <summary>判断蛇尾整体是否越过对应边界点。</summary>
@@ -177,18 +222,30 @@ public class SnakeGameView : MonoBehaviour
         RectTransform tail = visual.parts[visual.parts.Count - 1].GetComponent<RectTransform>();
         Vector3[] corners = new Vector3[4];
         tail.GetWorldCorners(corners);
+        return IsBeyondBoundary(corners, direction);
+    }
+
+    /// <summary>根据移动方向判断矩形是否越过对应边界。</summary>
+    private bool IsBeyondBoundary(Vector3[] corners, SnakeGameModel.MoveDirection direction)
+    {
         float left = RectTransformUtility.WorldToScreenPoint(null, corners[0]).x;
         float right = RectTransformUtility.WorldToScreenPoint(null, corners[2]).x;
         float bottom = RectTransformUtility.WorldToScreenPoint(null, corners[0]).y;
         float top = RectTransformUtility.WorldToScreenPoint(null, corners[2]).y;
-        Vector3 boundary = direction == SnakeGameModel.MoveDirection.Up ? topBoundary.position : direction == SnakeGameModel.MoveDirection.Down ? bottomBoundary.position : direction == SnakeGameModel.MoveDirection.Left ? leftBoundary.position : rightBoundary.position;
-        Vector2 boundaryScreen = RectTransformUtility.WorldToScreenPoint(null, boundary);
+        float topY = RectTransformUtility.WorldToScreenPoint(null, topBoundary.position).y;
+        float bottomY = RectTransformUtility.WorldToScreenPoint(null, bottomBoundary.position).y;
+        float leftX = RectTransformUtility.WorldToScreenPoint(null, leftBoundary.position).x;
+        float rightX = RectTransformUtility.WorldToScreenPoint(null, rightBoundary.position).x;
         switch (direction)
         {
-            case SnakeGameModel.MoveDirection.Up: return bottom > boundaryScreen.y;
-            case SnakeGameModel.MoveDirection.Down: return top < boundaryScreen.y;
-            case SnakeGameModel.MoveDirection.Left: return right < boundaryScreen.x;
-            default: return left > boundaryScreen.x;
+            case SnakeGameModel.MoveDirection.Up: return bottom > topY;
+            case SnakeGameModel.MoveDirection.Down: return top < bottomY;
+            case SnakeGameModel.MoveDirection.Left: return right < leftX;
+            case SnakeGameModel.MoveDirection.Right: return left > rightX;
+            case SnakeGameModel.MoveDirection.UpRight: return bottom > topY || left > rightX;
+            case SnakeGameModel.MoveDirection.UpLeft: return bottom > topY || right < leftX;
+            case SnakeGameModel.MoveDirection.DownRight: return top < bottomY || left > rightX;
+            default: return top < bottomY || right < leftX;
         }
     }
 
@@ -197,7 +254,18 @@ public class SnakeGameView : MonoBehaviour
     {
         StopAllCoroutines();
         visuals.Clear();
-        if (tracesRoot != null)
+        if (obstaclesRoot != null)
+        {
+            for (int i = obstaclesRoot.childCount - 1; i >= 0; i--)
+            {
+                GameObject obstacle = obstaclesRoot.GetChild(i).gameObject;
+                SnakeWayBlockerView blocker = obstacle.GetComponent<SnakeWayBlockerView>();
+                SnakeBlackHoleView hole = obstacle.GetComponent<SnakeBlackHoleView>();
+                obstacle.transform.SetParent(poolRoot, false);
+                if (blocker != null) { blocker.Recycle(); wayBlockerPool.Add(blocker); }
+                if (hole != null) { hole.Recycle(); blackHolePool.Add(hole); }
+            }
+        }        if (tracesRoot != null)
         {
             for (int i = tracesRoot.childCount - 1; i >= 0; i--)
             {
@@ -236,6 +304,16 @@ public class SnakeGameView : MonoBehaviour
         snakesRoot.anchorMax = Vector2.one;
         snakesRoot.offsetMin = Vector2.zero;
         snakesRoot.offsetMax = Vector2.zero;
+        if (obstaclesRoot == null)
+        {
+            GameObject obstaclesObject = CreateUIObject("Obstacles", boardRoot);
+            obstaclesRoot = obstaclesObject.GetComponent<RectTransform>();
+            obstaclesRoot.anchorMin = Vector2.zero;
+            obstaclesRoot.anchorMax = Vector2.one;
+            obstaclesRoot.offsetMin = Vector2.zero;
+            obstaclesRoot.offsetMax = Vector2.zero;
+            obstaclesRoot.SetAsLastSibling();
+        }
         if (poolRoot == null)
         {
             GameObject poolObject = CreateUIObject("Pool", boardRoot);
@@ -246,6 +324,67 @@ public class SnakeGameView : MonoBehaviour
             poolRoot.offsetMax = Vector2.zero;
             poolRoot.gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>创建关卡中的路径阻挡器和黑洞。</summary>
+    private void CreateObstacles()
+    {
+        for (int i = 0; i < model.wayBlockers.Count; i++)
+        {
+            SnakeWayBlockerView blocker = TakeWayBlocker();
+            Vector2Int blockerPosition = model.wayBlockers[i].position;
+            blocker.Initialize(model.wayBlockers[i].remainingTime, () => UIManager.Instance.GetUI<GameScenePanel>().snakeGameController.OnWayBlockerExpired(blockerPosition));
+            RectTransform rect = blocker.GetComponent<RectTransform>();
+            rect.anchoredPosition = CellToPosition(model.wayBlockers[i].position);
+            rect.localScale = GetPartScale();
+        }
+        for (int i = 0; i < model.blackHoles.Count; i++)
+        {
+            SnakeBlackHoleView hole = TakeBlackHole();
+            hole.Initialize();
+            RectTransform rect = hole.GetComponent<RectTransform>();
+            rect.anchoredPosition = CellToPosition(model.blackHoles[i].position);
+            rect.localScale = GetPartScale();
+        }
+        obstaclesRoot.SetAsLastSibling();
+    }
+
+    /// <summary>隐藏并回收指定位置的路径阻挡器。</summary>
+    public void HideWayBlocker(Vector2Int position)
+    {
+        for (int i = obstaclesRoot.childCount - 1; i >= 0; i--)
+        {
+            SnakeWayBlockerView blocker = obstaclesRoot.GetChild(i).GetComponent<SnakeWayBlockerView>();
+            if (blocker != null && blocker.GetComponent<RectTransform>().anchoredPosition == CellToPosition(position))
+            {
+                blocker.Recycle();
+                blocker.transform.SetParent(poolRoot, false);
+                wayBlockerPool.Add(blocker);
+                return;
+            }
+        }
+    }
+
+    /// <summary>取用一个路径阻挡器对象。</summary>
+    private SnakeWayBlockerView TakeWayBlocker()
+    {
+        if (wayBlockerPool.Count == 0) return Instantiate(wayBlockerPrefab, obstaclesRoot);
+        SnakeWayBlockerView result = wayBlockerPool[wayBlockerPool.Count - 1];
+        wayBlockerPool.RemoveAt(wayBlockerPool.Count - 1);
+        result.transform.SetParent(obstaclesRoot, false);
+        result.gameObject.SetActive(true);
+        return result;
+    }
+
+    /// <summary>取用一个黑洞对象。</summary>
+    private SnakeBlackHoleView TakeBlackHole()
+    {
+        if (blackHolePool.Count == 0) return Instantiate(blackHolePrefab, obstaclesRoot);
+        SnakeBlackHoleView result = blackHolePool[blackHolePool.Count - 1];
+        blackHolePool.RemoveAt(blackHolePool.Count - 1);
+        result.transform.SetParent(obstaclesRoot, false);
+        result.gameObject.SetActive(true);
+        return result;
     }
 
     /// <summary>创建一条蛇初始占格的静态痕迹。</summary>

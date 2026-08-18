@@ -79,10 +79,12 @@
     <Compile Include="Assets\Scripts\SnakeGame\SnakeSpriteSet.cs" />
     <Compile Include="Assets\Scripts\Panel\GameScenePanel.cs" />
     <Compile Include="Assets\Scripts\Panel\PlayerInfoUI.cs" />
+    <Compile Include="Assets\Scripts\SnakeGame\SnakeWayBlockerView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeHeadView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameController.cs" />
     <Compile Include="Assets\Scripts\language\MultilingualSprite.cs" />
     <Compile Include="Assets\Scripts\Manager\UIBase.cs" />
+    <Compile Include="Assets\Scripts\SnakeGame\SnakeBlackHoleView.cs" />
     <Compile Include="Assets\Scripts\AB\ABResManager.cs" />
     <Compile Include="Assets\Scripts\Effect\GoldFlyControl.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Exchange.cs" />

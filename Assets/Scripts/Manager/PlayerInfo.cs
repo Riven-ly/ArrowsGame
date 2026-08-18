@@ -20,7 +20,7 @@ public class PlayerInfo
 
     [SerializeField] private int gold = 0;
     private int diamond = 0;
-    public int level = 43;
+    public int level = 46;
     public int goldLevel = 0; // 金币等级
     public int goldExperience; // 当前金币等级经验，单位为0.1
 
