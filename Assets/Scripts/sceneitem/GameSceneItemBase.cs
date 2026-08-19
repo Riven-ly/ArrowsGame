@@ -12,13 +12,9 @@ public enum SceneItemType
     /// </summary>
     item_hint,
     /// <summary>
-    /// 洗牌
+    /// 自动点击
     /// </summary>
-    item_Exchange,
-    /// <summary>
-    /// 撤回
-    /// </summary>
-    item_Return,
+    item_AutoClick,
 }
 public class GameSceneItemBase : MonoBehaviour
 {
@@ -27,14 +23,15 @@ public class GameSceneItemBase : MonoBehaviour
     public Button lockBtn;
     public Text cntStr;
     public Canvas canvas;
+    public Text lockStr;
 
     public Transform unLockTrans;
     public Transform lockTrans;
 
-    public RewardAdButton rewardAdButton;
-
     protected int cnt;
     protected int lockLv = 1;
+    protected int eachRoundItemUseCnt = 0;
+    protected int eachRoundItemUseCntMax = 3;
 
     private void Start()
     {
@@ -51,6 +48,11 @@ public class GameSceneItemBase : MonoBehaviour
         });
     }
 
+    public void ResetEachRoundItemUseCnt()
+    {
+        eachRoundItemUseCnt = 0;
+    }
+
     public void CanvasTop()
     {
         canvas.sortingOrder = 505;
@@ -60,22 +62,6 @@ public class GameSceneItemBase : MonoBehaviour
         canvas.sortingOrder = 99;
     }
 
-    public void ScaleAnim()
-    {
-        transform.DOKill();
-        transform.localScale = Vector3.one;
-        DOTween.Sequence()
-               .Append(transform.DOScale(1.1f, 0.2f))
-               .Append(transform.DOScale(0.9f, 0.1f))
-               .Append(transform.DOScale(1f, 0.1f))
-               .SetTarget(transform);
-    }
-
-
-    public virtual void AdsCallback()
-    {
-
-    }
     public virtual void Refresh()
     {
     }

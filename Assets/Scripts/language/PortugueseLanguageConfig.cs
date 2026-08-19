@@ -9,7 +9,7 @@ public static class PortugueseLanguageConfig
     public static Dictionary<string, string> currentTexts = new Dictionary<string, string>()
     {
       
-        {"Special_Diamond__unit", "JA=="},
+        {"Special_Diamond_unit", "JA=="},
         {"CHT", "U2FjYXI="},
         {"CH", "c2FjYXI="},
         {"WD", "UmV0aXJhcg=="},

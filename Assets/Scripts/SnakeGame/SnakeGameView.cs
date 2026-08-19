@@ -8,6 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SnakeGameView : MonoBehaviour
 {
+    public ScrollRect scrollRect;
     /// <summary>棋盘背景颜色。</summary>
     private static readonly Color BoardColor = new Color(0.97f, 0.96f, 0.91f, 1f);
     /// <summary>当前模型。</summary>
@@ -48,6 +49,7 @@ public class SnakeGameView : MonoBehaviour
     private readonly List<SnakeBlackHoleView> blackHolePool = new List<SnakeBlackHoleView>();
     /// <summary>部件对象池根节点。</summary>
     private RectTransform poolRoot;
+    private BoardZoomController boardZoomController;
     /// <summary>闲置蛇头对象池。</summary>
     private readonly List<SnakeHeadView> headPool = new List<SnakeHeadView>();
     /// <summary>闲置蛇身对象池。</summary>
@@ -76,6 +78,8 @@ public class SnakeGameView : MonoBehaviour
         public readonly List<Image> bodyImages = new List<Image>();
         /// <summary>蛇头图片。</summary>
         public Image headImage;
+        /// <summary>蛇头视图。</summary>
+        public SnakeHeadView headView;
         /// <summary>真实蛇部件对象列表。</summary>
         public readonly List<GameObject> parts = new List<GameObject>();
         /// <summary>相邻真实部件之间的视觉补间蛇身。</summary>
@@ -87,7 +91,13 @@ public class SnakeGameView : MonoBehaviour
     {
         model = gameModel;
         ClearView();
+        scrollRect.horizontalNormalizedPosition = 0.5f;
         CreateBoard();
+        if (boardZoomController == null)
+        {
+            boardZoomController = boardRoot.transform.parent.GetComponent<BoardZoomController>();
+        }
+        boardZoomController.Initialize(GetPartScale());
         CreateObstacles();
         for (int i = 0; i < model.snakes.Count; i++)
         {
@@ -326,6 +336,18 @@ public class SnakeGameView : MonoBehaviour
         }
     }
 
+    /// <summary>显示指定蛇头的提示线。</summary>
+    public void ShowSnakeHints(List<int> snakeIds, float duration)
+    {
+        for (int i = 0; i < snakeIds.Count; i++)
+        {
+            if (visuals.ContainsKey(snakeIds[i]))
+            {
+                visuals[snakeIds[i]].headView.ShowHint(duration);
+            }
+        }
+    }
+
     /// <summary>创建关卡中的路径阻挡器和黑洞。</summary>
     private void CreateObstacles()
     {
@@ -333,7 +355,7 @@ public class SnakeGameView : MonoBehaviour
         {
             SnakeWayBlockerView blocker = TakeWayBlocker();
             Vector2Int blockerPosition = model.wayBlockers[i].position;
-            blocker.Initialize(model.wayBlockers[i].remainingTime, () => UIManager.Instance.GetUI<GameScenePanel>().snakeGameController.OnWayBlockerExpired(blockerPosition));
+            blocker.Initialize(model.wayBlockers[i].remainingSnakeCount, () => UIManager.Instance.GetUI<GameScenePanel>().snakeGameController.OnWayBlockerExpired(blockerPosition));
             RectTransform rect = blocker.GetComponent<RectTransform>();
             rect.anchoredPosition = CellToPosition(model.wayBlockers[i].position);
             rect.localScale = GetPartScale();
@@ -347,6 +369,16 @@ public class SnakeGameView : MonoBehaviour
             rect.localScale = GetPartScale();
         }
         obstaclesRoot.SetAsLastSibling();
+    }
+
+    /// <summary>通知所有有效阻挡器一条蛇已经消除。</summary>
+    public void NotifySnakeRemoved()
+    {
+        for (int i = 0; i < obstaclesRoot.childCount; i++)
+        {
+            SnakeWayBlockerView blocker = obstaclesRoot.GetChild(i).GetComponent<SnakeWayBlockerView>();
+            if (blocker != null) blocker.OnSnakeRemoved();
+        }
     }
 
     /// <summary>隐藏并回收指定位置的路径阻挡器。</summary>
@@ -463,6 +495,7 @@ public class SnakeGameView : MonoBehaviour
         }
         SetRealPartSiblingOrder(visual);
         visual.headImage = visual.bodyImages[0];
+        visual.headView = visual.parts[0].GetComponent<SnakeHeadView>();
         visuals.Add(snake.id, visual);
         UpdateSnakeVisual(visual, snake);
     }

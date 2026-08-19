@@ -24,10 +24,8 @@ public class PlayerInfo
     public int goldLevel = 0; // 金币等级
     public int goldExperience; // 当前金币等级经验，单位为0.1
 
-    public int gameSceneItem_Hint = 5;
-    public int gameSceneItem_Extract = 5;
-    public int gameSceneItem_Exchange = 5;
-    public int gameSceneItem_Return = 5;
+    public int gameSceneItem_Hint = 500;
+    public int gameSceneItem_AutoClick = 500;
 
     /// <summary>
     /// 增加金币等级经验并处理升级。经验单位为0.1。
@@ -105,35 +103,14 @@ public class PlayerInfo
         gameSceneItem_Hint = Mathf.Max(gameSceneItem_Hint, 0);
     }
     //========================= Extract 魔法棒道具 =========================
-    public void Add_item_extract(int _cnt)
+    public void Add_item_autoClick(int _cnt)
     {
-        gameSceneItem_Extract += _cnt;
+        gameSceneItem_AutoClick += _cnt;
     }
-    public void Minus_item_extract(int _cnt)
+    public void Minus_item_autoClick(int _cnt)
     {
-        gameSceneItem_Extract -= _cnt;
-        gameSceneItem_Extract = Mathf.Max(gameSceneItem_Extract, 0);
-    }
-
-    //========================= Exchange 洗牌道具 =========================
-    public void Add_item_exchange(int _cnt)
-    {
-        gameSceneItem_Exchange += _cnt;
-    }
-    public void Minus_item_exchange(int _cnt)
-    {
-        gameSceneItem_Exchange -= _cnt;
-        gameSceneItem_Exchange = Mathf.Max(gameSceneItem_Exchange, 0);
+        gameSceneItem_AutoClick -= _cnt;
+        gameSceneItem_AutoClick = Mathf.Max(gameSceneItem_AutoClick, 0);
     }
 
-    //========================= Return 撤回道具 =========================
-    public void Add_item_return(int _cnt)
-    {
-        gameSceneItem_Return += _cnt;
-    }
-    public void Minus_item_return(int _cnt)
-    {
-        gameSceneItem_Return -= _cnt;
-        gameSceneItem_Return = Mathf.Max(gameSceneItem_Return, 0);
-    }
 }

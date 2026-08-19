@@ -109,7 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIPanelLayer: 1
   isOpen: 0
-  panelAnim: {fileID: 8875375483466240473}
+  panelAnim: {fileID: 0}
   trans: {fileID: 5386708081905669874}
   canvasGroup: {fileID: 7889255590982986873}
   tipText: {fileID: 5660183446360311138}
@@ -181,7 +181,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 8e8f304955380a942bf4b4d27b2e6d7e, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 1

@@ -11,30 +11,20 @@ public class GameSceneItem_Hint : GameSceneItemBase
         cnt = GameManager.Instance.playerInfo.gameSceneItem_Hint;
         type = SceneItemType.item_hint;
         lockLv = 1;
-
         bool isLock = GameManager.Instance.playerInfo.level < lockLv;
+
+        string firstGuid = PlayerPrefs.GetString("GameSceneItem_Hint");
+        if (!isLock && string.IsNullOrEmpty(firstGuid))
+        {
+            GameManager.Instance.playerInfo.Add_item_hint(1);
+            PlayerPrefs.SetString("GameSceneItem_Hint", "yes");
+        }
 
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
         cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Hint.ToString();
-
-        clickBtn.gameObject.SetActive(cnt > 0);
-        cntStr.gameObject.SetActive(cnt > 0);
-        rewardAdButton.gameObject.SetActive(cnt <= 0);
-        rewardAdButton.Init(AdsCallback, "", false);
-    }
-
-    public override void AdsCallback()
-    {
-        base.AdsCallback();
-
-        GameManager.Instance.playerInfo.Add_item_hint(1);
-        GameManager.Instance.SavePlayerInfo();
-        DOTween.Sequence().AppendInterval(0.1f).AppendCallback(() =>
-        {
-            Refresh();
-        });
+        lockStr.text = $"Lv.{lockLv}";
     }
 
     public override void OnClick()
@@ -46,18 +36,25 @@ public class GameSceneItem_Hint : GameSceneItemBase
             return;
         }
 
+        if (eachRoundItemUseCnt >= eachRoundItemUseCntMax)
+        {
+            string str = $"单局道具最多使用 {eachRoundItemUseCntMax} 次!";
+            UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
+            return;
+        }
+
         EventManager.Instance.TriggerEvent(GameEvent.StopHintAnim);
         bool isUseItemSucceed = TryUseItem();
         if (isUseItemSucceed)
         {
+            eachRoundItemUseCnt++;
             GameManager.Instance.playerInfo.Minus_item_hint(1);
-            //GameManager.Instance.SavePlayerInfo();
             Refresh();
         }
     }
 
     public override bool TryUseItem()
     {
-        return base.TryUseItem();
+        return UIManager.Instance.GetUI<GameScenePanel>().snakeGameController.TryShowSafeSnakeHints(10f);
     }
 }

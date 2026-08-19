@@ -11,4 +11,6 @@ maintenanceRules: |-
 ---
 
 用户偏好：除高风险、破坏性操作或关键需求歧义外，直接连续执行任务并交付最终结果，不要反复请求确认。
+用户偏好：Unity UI 动画优先使用项目现有的 DOTween，不使用协程替代补间动画。
+用户偏好：DOTween 动画默认不使用 SetUpdate；Unity 组件引用优先使用 Inspector/面板序列化引用，避免运行时 GetComponent。
 

@@ -63,6 +63,59 @@ public class SnakeGameController : MonoBehaviour
         inputEnabled = false;
     }
 
+    /// <summary>自动点击一条当前未移动且不会撞到阻挡的蛇。</summary>
+    public bool TryAutoClickSafeSnake()
+    {
+        if (!inputEnabled)
+        {
+            return false;
+        }
+        for (int i = 0; i < model.snakes.Count; i++)
+        {
+            SnakeGameModel.SnakeData snake = model.snakes[i];
+            if (snake.removed || movingSnakeIds.Contains(snake.id))
+            {
+                continue;
+            }
+            List<List<Vector2Int>> layouts;
+            if (!BuildMoveTrack(snake, out layouts))
+            {
+                OnSnakeClicked(snake.id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>显示所有当前可安全移动蛇头的提示线。</summary>
+    public bool TryShowSafeSnakeHints(float duration)
+    {
+        if (!inputEnabled)
+        {
+            return false;
+        }
+        List<int> safeSnakeIds = new List<int>();
+        for (int i = 0; i < model.snakes.Count; i++)
+        {
+            SnakeGameModel.SnakeData snake = model.snakes[i];
+            if (snake.removed || movingSnakeIds.Contains(snake.id))
+            {
+                continue;
+            }
+            List<List<Vector2Int>> layouts;
+            if (!BuildMoveTrack(snake, out layouts))
+            {
+                safeSnakeIds.Add(snake.id);
+            }
+        }
+        if (safeSnakeIds.Count == 0)
+        {
+            return false;
+        }
+        view.ShowSnakeHints(safeSnakeIds, duration);
+        return true;
+    }
+
     /// <summary>重新开始首版示例关卡。</summary>
     public void ResetGame()
     {
@@ -105,6 +158,7 @@ public class SnakeGameController : MonoBehaviour
         {
             yield return view.PlayExit(snake, layouts);
             snake.removed = true;
+            view.NotifySnakeRemoved();
             snakeCountChangedEvent?.Invoke();
             if (AllSnakesRemoved())
             {
@@ -251,7 +305,7 @@ public class SnakeGameController : MonoBehaviour
             result.wayBlockers.Add(new SnakeGameModel.WayBlockerData
             {
                 position = config.wayBlockers[i].position.ToCell(),
-                remainingTime = config.wayBlockers[i].lockTime
+                remainingSnakeCount = Mathf.RoundToInt(config.wayBlockers[i].lockTime)
             });
         }
         for (int i = 0; i < config.blackHoles.Count; i++)

@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         Application.targetFrameRate = 60;
-        Input.multiTouchEnabled = false;
+        Input.multiTouchEnabled = true;
     }
 
     private void Start()

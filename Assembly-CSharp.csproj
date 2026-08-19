@@ -60,7 +60,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Return.cs" />
+    <Compile Include="Assets\Scripts\SetBoundary.cs" />
     <Compile Include="Assets\Scripts\Panel\EvaluationGamePanel.cs" />
     <Compile Include="Assets\Scripts\AB\ABbuildManager.cs" />
     <Compile Include="Assets\Scripts\language\PortugueseLanguageConfig.cs" />
@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Panel\GameScenePanel.cs" />
     <Compile Include="Assets\Scripts\Panel\PlayerInfoUI.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeWayBlockerView.cs" />
+    <Compile Include="Assets\Scripts\SnakeGame\BoardZoomController.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeHeadView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameController.cs" />
     <Compile Include="Assets\Scripts\language\MultilingualSprite.cs" />
@@ -87,7 +88,6 @@
     <Compile Include="Assets\Scripts\SnakeGame\SnakeBlackHoleView.cs" />
     <Compile Include="Assets\Scripts\AB\ABResManager.cs" />
     <Compile Include="Assets\Scripts\Effect\GoldFlyControl.cs" />
-    <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Exchange.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameModel.cs" />
     <Compile Include="Assets\Scripts\Effect\FlickerStar.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItemBase.cs" />
@@ -96,6 +96,7 @@
     <Compile Include="Assets\Scripts\Manager\AudioManager.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeTailView.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
+    <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_AutoClick.cs" />
     <Compile Include="Assets\Scripts\NetworkChecker\NetworkChecker.cs" />
     <Compile Include="Assets\Scripts\AB\SwitchAorBSprite.cs" />
     <Compile Include="Assets\Scripts\language\LanguageManager.cs" />

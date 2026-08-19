@@ -75,7 +75,7 @@ public static class EnglishLanguageConfig
         {"CANCLE", "CANCLE"},
         {"SUBMIT", "SUBMIT"},
         //-------
-        {"Special_Diamond__unit", "JA=="},//特殊钻石符号$
+        {"Special_Diamond_unit", "JA=="},//特殊钻石符号$
         {"CHT", "Y2FzaCBvdXQ="},//Cash out
         {"Ch", "Q2FzaA=="},//Cash 
         {"CH", "Q0FTSA=="},//CASH

@@ -70,8 +70,8 @@ public class SnakeGameModel
     {
         /// <summary>阻挡器坐标。</summary>
         public Vector2Int position;
-        /// <summary>剩余存在时间。</summary>
-        public float remainingTime;
+        /// <summary>剩余需要消除的蛇数量。</summary>
+        public int remainingSnakeCount;
         /// <summary>阻挡器是否仍然有效。</summary>
         public bool active = true;
     }

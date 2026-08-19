@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,9 @@ public class GameScenePanel : UIBase
     public Text title;
     public Button settingBtn;
     public Button resetBtn;
+    public GameSceneItem_AutoClick gameSceneItem_AutoClick;
+    public GameSceneItem_Hint gameSceneItem_Hint;
+
     /// <summary>蛇玩法模块控制器。</summary>
     public SnakeGameController snakeGameController;
     /// <summary>当前剩余生命。</summary>
@@ -24,6 +28,12 @@ public class GameScenePanel : UIBase
     [SerializeField] private Text gameTimeText;
     /// <summary>蛇数量文本。</summary>
     [SerializeField] private Text snakeCountText;
+    /// <summary>蛇撞到阻挡时显示的错误提示图片。</summary>
+    [SerializeField] private Image snakeError;
+    /// <summary>错误提示淡入淡出时长。</summary>
+    private float snakeErrorFadeDuration = 0.15f;
+    /// <summary>错误提示每次闪烁时长。</summary>
+    private float snakeErrorFlashDuration = 0.1f;
     /// <summary>当前剩余游戏时间。</summary>
     private float remainingGameTime;
 
@@ -33,6 +43,7 @@ public class GameScenePanel : UIBase
     private void Awake()
     {
         RectTransform rect = root.GetComponent<RectTransform>();
+        snakeError.gameObject.SetActive(false);
         float topBlockHeight = Screen.height - Screen.safeArea.yMax;
         rect.offsetMax = new Vector2(0, -topBlockHeight);
         snakeGameController.collisionEvent += OnSnakeCollision;
@@ -40,9 +51,20 @@ public class GameScenePanel : UIBase
         snakeGameController.snakeCountChangedEvent += RefreshSnakeCount;
     }
 
+    private void OnEnable()
+    {
+        isOpen = false;
+    }
+
+    private void OnDisable()
+    {
+        isOpen = false;
+    }
+
     /// <summary>解除玩法事件订阅。</summary>
     private void OnDestroy()
     {
+        DOTween.Kill(snakeError);
         if (snakeGameController != null)
         {
             snakeGameController.collisionEvent -= OnSnakeCollision;
@@ -90,15 +112,21 @@ public class GameScenePanel : UIBase
     {
         base.Refresh(data);
         StopCoroutine("GameTimer");
+        DOTween.Kill(snakeError);
+        snakeError.gameObject.SetActive(false);
         title.text = LanguageManager.Instance.GetText("Level") + $" {GameManager.Instance.playerInfo.level}";
         currentLives = 3;
-        isGameOver = false;
         remainingGameTime = gameDuration;
         snakeGameController.Initialize();
         RefreshLifeImages();
         RefreshGameTime();
         RefreshSnakeCount();
+        isGameOver = false;
         GameManager.IsGamePause = false;
+        gameSceneItem_AutoClick.Refresh();
+        gameSceneItem_AutoClick.ResetEachRoundItemUseCnt();
+        gameSceneItem_Hint.Refresh();
+        gameSceneItem_Hint.ResetEachRoundItemUseCnt();
         StartCoroutine(GameTimer());
     }
 
@@ -142,11 +170,30 @@ public class GameScenePanel : UIBase
         }
         currentLives--;
         RefreshLifeImages();
+        StartSnakeErrorEffect();
         Debug.Log("蛇撞到阻挡，扣除 1 点生命并原路倒车。");
         if (currentLives <= 0)
         {
             GameOver();
         }
+    }
+
+    /// <summary>播放蛇撞到阻挡时的错误提示效果。</summary>
+    private void StartSnakeErrorEffect()
+    {
+        if (SettingPanel.IsVibrateEnabled)
+        {
+            Handheld.Vibrate();
+        }
+        DOTween.Kill(snakeError);
+        snakeError.gameObject.SetActive(true);
+        snakeError.color = new Color(snakeError.color.r, snakeError.color.g, snakeError.color.b, 0f);
+        Sequence sequence = DOTween.Sequence().SetTarget(snakeError);
+        sequence.Append(snakeError.DOFade(1f, snakeErrorFadeDuration));
+        sequence.Append(snakeError.DOFade(0f, snakeErrorFlashDuration));
+        sequence.Append(snakeError.DOFade(1f, snakeErrorFlashDuration));
+        sequence.Append(snakeError.DOFade(0f, snakeErrorFlashDuration));
+        sequence.OnComplete(() => snakeError.gameObject.SetActive(false));
     }
 
     /// <summary>刷新面板上的三个生命图片。</summary>

@@ -11,9 +11,7 @@ public enum ItemType
     Diamond,
     DiamondDui,
     Hint,// 提示
-    Exchange,// 洗牌
-    Extract,// 魔法棒
-    Return,// 撤回
+    AutoClick,// 自动点击
 }
 
 public class ItemData
@@ -46,13 +44,13 @@ public class ItemBase : MonoBehaviour
         icon.SetNativeSize();
         icon.transform.localScale = Vector3.one * iconScales[(int)itemType];
 
-        if(itemType == ItemType.Hint || itemType == ItemType.Exchange || itemType == ItemType.Extract || itemType == ItemType.Return)
+        if(itemType == ItemType.Hint || itemType == ItemType.AutoClick)
         {
             cntText.text = "x" + count;
         }
         else
         {
-            string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond__unit");
+            string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
             cntText.text = unit + MathF.Round(count / (float)PlayerInfo.CurrencyUnitScale, 2);
         }
 
@@ -85,15 +83,10 @@ public class ItemBase : MonoBehaviour
             case ItemType.Hint:
                 GameManager.Instance.playerInfo.Add_item_hint(count);
                 break;
-            case ItemType.Exchange:
-                GameManager.Instance.playerInfo.Add_item_exchange(count);
+            case ItemType.AutoClick:
+                GameManager.Instance.playerInfo.Add_item_autoClick(count);
                 break;
-            case ItemType.Extract:
-                GameManager.Instance.playerInfo.Add_item_extract(count);
-                break;
-            case ItemType.Return:
-                GameManager.Instance.playerInfo.Add_item_return(count);
-                break;
+
         }
 
 
@@ -116,13 +109,8 @@ public class ItemBase : MonoBehaviour
                 UIManager.Instance.GetUI<PlayerInfoUI>().DiamondFlyAnim(transform.position);
                 break;
             case ItemType.Hint:
-                //UIManager.Instance.GetUI<GameScenePanel>()?.gameSceneItem_Hint.Refresh();
                 break;
-            case ItemType.Exchange:
-                //UIManager.Instance.GetUI<GameScenePanel>()?.gameSceneItem_Exchange.Refresh();
-                break;
-            case ItemType.Return:
-                //UIManager.Instance.GetUI<GameScenePanel>()?.gameSceneItem_Return.Refresh();
+            case ItemType.AutoClick:
                 break;
         }
     }
