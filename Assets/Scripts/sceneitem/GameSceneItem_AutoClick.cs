@@ -9,7 +9,6 @@ public class GameSceneItem_AutoClick : GameSceneItemBase
     public override void Refresh()
     {
         base.Refresh();
-        cnt = GameManager.Instance.playerInfo.gameSceneItem_AutoClick;
         type = SceneItemType.item_AutoClick;
         lockLv = 3;
         bool isLock = GameManager.Instance.playerInfo.level < lockLv;
@@ -21,10 +20,13 @@ public class GameSceneItem_AutoClick : GameSceneItemBase
             PlayerPrefs.SetString("GameSceneItem_AutoClick","yes");
         }
 
+        cnt = GameManager.Instance.playerInfo.gameSceneItem_AutoClick;
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_AutoClick.ToString();
+        cntStr.text = GameManager.Instance.playerInfo.gameSceneItem_AutoClick.ToString();
+        cntStr.gameObject.SetActive(cnt > 0);
+        addTrans.gameObject.SetActive(cnt <= 0);
         lockStr.text = $"Lv.{lockLv}";
     }
 
@@ -35,7 +37,7 @@ public class GameSceneItem_AutoClick : GameSceneItemBase
         base.OnClick();
         if (cnt <= 0)
         {
-            //UIManager.Instance.OpenUI<AddSceneItemPanel>(this);
+            UIManager.Instance.OpenUI<AddSceneItemPanel>(this);
             return;
         }
 

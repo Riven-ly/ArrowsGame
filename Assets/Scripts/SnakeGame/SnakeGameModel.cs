@@ -20,7 +20,9 @@ public class SnakeGameModel
         Type8,
         Type9,
         Type10,
-        Type11
+        Type11,
+        Type12,
+        Type13,
     }
 
     /// <summary>单格方向。</summary>

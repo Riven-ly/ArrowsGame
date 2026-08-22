@@ -22,6 +22,7 @@ public class GameSceneItemBase : MonoBehaviour
     public Button clickBtn;
     public Button lockBtn;
     public Text cntStr;
+    public Transform addTrans;
     public Canvas canvas;
     public Text lockStr;
 
@@ -30,8 +31,8 @@ public class GameSceneItemBase : MonoBehaviour
 
     protected int cnt;
     protected int lockLv = 1;
-    protected int eachRoundItemUseCnt = 0;
-    protected int eachRoundItemUseCntMax = 3;
+    public int eachRoundItemUseCnt = 0;
+    public int eachRoundItemUseCntMax = 3;
 
     private void Start()
     {
@@ -43,8 +44,8 @@ public class GameSceneItemBase : MonoBehaviour
         lockBtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            //string str = string.Format(LanguageManager.Instance.GetText("LockLvTips"), lockLv);
-            //UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
+            string str = string.Format(LanguageManager.Instance.GetText("LockLvTips"), lockLv);
+            UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
         });
     }
 

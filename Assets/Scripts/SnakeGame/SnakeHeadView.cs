@@ -20,7 +20,7 @@ public class SnakeHeadView : MonoBehaviour
     {
         HideHint();
         headImage.sprite = sprite;
-        transform.localRotation = Quaternion.Euler(0f, 0f, DirectionAngle(direction));
+        SetDirection(direction);
         headImage.raycastTarget = true;
         clickButton.onClick.RemoveAllListeners();
         clickButton.onClick.AddListener(() => clickAction());
@@ -53,6 +53,12 @@ public class SnakeHeadView : MonoBehaviour
         HideHint();
         clickButton.onClick.RemoveAllListeners();
         gameObject.SetActive(false);
+    }
+
+    /// <summary>更新蛇头朝向。</summary>
+    public void SetDirection(SnakeGameModel.MoveDirection direction)
+    {
+        transform.localRotation = Quaternion.Euler(0f, 0f, DirectionAngle(direction));
     }
 
     /// <summary>以图片默认朝下为基准，将蛇方向转换为旋转角度。</summary>

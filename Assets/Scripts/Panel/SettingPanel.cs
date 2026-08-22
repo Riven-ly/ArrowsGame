@@ -90,10 +90,10 @@ public class SettingPanel : UIBase
         resetGameBtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            callback = () =>
+            AddCallback(() =>
             {
                 UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
-            };
+            });
             Hide();
         });
 

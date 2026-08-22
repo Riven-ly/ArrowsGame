@@ -8,9 +8,8 @@ public class GameSceneItem_Hint : GameSceneItemBase
     public override void Refresh()
     {
         base.Refresh();
-        cnt = GameManager.Instance.playerInfo.gameSceneItem_Hint;
         type = SceneItemType.item_hint;
-        lockLv = 1;
+        lockLv = 10;
         bool isLock = GameManager.Instance.playerInfo.level < lockLv;
 
         string firstGuid = PlayerPrefs.GetString("GameSceneItem_Hint");
@@ -20,10 +19,13 @@ public class GameSceneItem_Hint : GameSceneItemBase
             PlayerPrefs.SetString("GameSceneItem_Hint", "yes");
         }
 
+        cnt = GameManager.Instance.playerInfo.gameSceneItem_Hint;
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Hint.ToString();
+        cntStr.text = GameManager.Instance.playerInfo.gameSceneItem_Hint.ToString();
+        cntStr.gameObject.SetActive(cnt > 0);
+        addTrans.gameObject.SetActive(cnt <= 0);
         lockStr.text = $"Lv.{lockLv}";
     }
 
@@ -32,7 +34,7 @@ public class GameSceneItem_Hint : GameSceneItemBase
         base.OnClick();
         if (cnt <= 0)
         {
-            //UIManager.Instance.OpenUI<AddSceneItemPanel>(this);
+            UIManager.Instance.OpenUI<AddSceneItemPanel>(this);
             return;
         }
 

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,23 +10,27 @@ using UnityEngine;
 public class PlayerInfo
 {
     public const int CurrencyUnitScale = 100;
+    [JsonIgnore]
     public float Gold
     {
         get => MathF.Round(gold / (float)CurrencyUnitScale, 2);
     }
+    [JsonIgnore]
     public float Diamond
     {
         get => MathF.Round(diamond / (float)CurrencyUnitScale, 2);
     }
 
-    [SerializeField] private int gold = 0;
+    [JsonProperty]
+    private int gold = 0;
+    [JsonProperty]
     private int diamond = 0;
-    public int level = 46;
+    public int level = 1;
     public int goldLevel = 0; // 金币等级
     public int goldExperience; // 当前金币等级经验，单位为0.1
 
-    public int gameSceneItem_Hint = 500;
-    public int gameSceneItem_AutoClick = 500;
+    public int gameSceneItem_Hint = 0;
+    public int gameSceneItem_AutoClick = 0;
 
     /// <summary>
     /// 增加金币等级经验并处理升级。经验单位为0.1。

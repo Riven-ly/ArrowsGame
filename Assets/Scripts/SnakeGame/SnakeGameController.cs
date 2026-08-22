@@ -24,6 +24,8 @@ public class SnakeGameController : MonoBehaviour
     public Action victoryEvent;
     /// <summary>通知面板刷新蛇数量。</summary>
     public Action snakeCountChangedEvent;
+    /// <summary>通知面板一条蛇成功完成移动。</summary>
+    public Action snakeMoveSuccessEvent;
 
     /// <summary>初始化首版示例关卡。</summary>
     public void Initialize()
@@ -61,6 +63,12 @@ public class SnakeGameController : MonoBehaviour
     public void StopInput()
     {
         inputEnabled = false;
+    }
+
+    /// <summary>恢复玩家输入。</summary>
+    public void ResumeInput()
+    {
+        inputEnabled = true;
     }
 
     /// <summary>自动点击一条当前未移动且不会撞到阻挡的蛇。</summary>
@@ -156,10 +164,15 @@ public class SnakeGameController : MonoBehaviour
         }
         else
         {
+            if (SettingPanel.IsVibrateEnabled)
+            {
+                Handheld.Vibrate();
+            }
             yield return view.PlayExit(snake, layouts);
             snake.removed = true;
             view.NotifySnakeRemoved();
             snakeCountChangedEvent?.Invoke();
+            snakeMoveSuccessEvent?.Invoke();
             if (AllSnakesRemoved())
             {
                 inputEnabled = false;
@@ -340,10 +353,11 @@ public class SnakeGameController : MonoBehaviour
         {
             Vector2Int current = cells[cells.Count - 1];
             Vector2Int target = nodes[i].ToCell();
-            Vector2Int offset = new Vector2Int(Mathf.Clamp(target.x - current.x, -1, 1), Mathf.Clamp(target.y - current.y, -1, 1));
             while (current != target)
             {
-                current += offset;
+                current += new Vector2Int(
+                    Mathf.Clamp(target.x - current.x, -1, 1),
+                    Mathf.Clamp(target.y - current.y, -1, 1));
                 cells.Add(current);
             }
         }
@@ -355,38 +369,38 @@ public class SnakeGameController : MonoBehaviour
     {
         switch (color)
         {
-            case "None": return SnakeGameModel.SnakeType.Type0;
-            case "Yellow": return SnakeGameModel.SnakeType.Type6;
-            case "Black": return SnakeGameModel.SnakeType.Type11;
-            case "Green": return SnakeGameModel.SnakeType.Type2;
-            case "Cyan": return SnakeGameModel.SnakeType.Type8;
-            case "Blue": return SnakeGameModel.SnakeType.Type7;
+            case "None":
             case "Orange": return SnakeGameModel.SnakeType.Type0;
-            case "Pink": return SnakeGameModel.SnakeType.Type4;
-            case "Purple": return SnakeGameModel.SnakeType.Type5;
-            case "DarkGreen": return SnakeGameModel.SnakeType.Type10;
-            case "Red": return SnakeGameModel.SnakeType.Type11;
-            case "White": return SnakeGameModel.SnakeType.Type3;
-            case "Brown": return SnakeGameModel.SnakeType.Type0;
-            case "Lime": return SnakeGameModel.SnakeType.Type2;
-            case "DarkViolet": return SnakeGameModel.SnakeType.Type5;
-            case "Gray": return SnakeGameModel.SnakeType.Type3;
-            case "Lipstick_lightRed": return SnakeGameModel.SnakeType.Type4;
-            case "Lipstick_navilight": return SnakeGameModel.SnakeType.Type8;
-            case "Lipstick_naviDark": return SnakeGameModel.SnakeType.Type7;
-            case "Lipstick_navi": return SnakeGameModel.SnakeType.Type8;
-            case "Lipstick_darkRed": return SnakeGameModel.SnakeType.Type11;
-            case "Lipstick_lightYellow": return SnakeGameModel.SnakeType.Type6;
-            case "Lipstick_red": return SnakeGameModel.SnakeType.Type4;
-            case "Lipstick_navipale": return SnakeGameModel.SnakeType.Type3;
-            case "JPPink": return SnakeGameModel.SnakeType.Type4;
-            case "JPBlue": return SnakeGameModel.SnakeType.Type7;
-            case "JPYellow": return SnakeGameModel.SnakeType.Type6;
-            case "JPCyan": return SnakeGameModel.SnakeType.Type8;
-            case "JPGreen": return SnakeGameModel.SnakeType.Type2;
-            case "JPDarkGreen": return SnakeGameModel.SnakeType.Type10;
-            case "JPViolet": return SnakeGameModel.SnakeType.Type5;
-            case "JPBlack": return SnakeGameModel.SnakeType.Type11;
+            case "Pink":
+            case "JPPink": return SnakeGameModel.SnakeType.Type1;
+            case "Red":
+            case "Lipstick_darkRed":
+            case "Lipstick_red": return SnakeGameModel.SnakeType.Type2;
+            case "Yellow":
+            case "JPYellow": return SnakeGameModel.SnakeType.Type3;
+            case "Blue":
+            case "Lipstick_naviDark":
+            case "JPBlue": return SnakeGameModel.SnakeType.Type4;
+            case "Green":
+            case "JPGreen": return SnakeGameModel.SnakeType.Type5;
+            case "Lipstick_lightRed": return SnakeGameModel.SnakeType.Type6;
+            case "Lipstick_lightYellow": return SnakeGameModel.SnakeType.Type7;
+            case "Lipstick_navilight":
+            case "Lipstick_navi":
+            case "Lipstick_navipale":
+            case "Gray": return SnakeGameModel.SnakeType.Type8;
+            case "Lime": return SnakeGameModel.SnakeType.Type9;
+            case "DarkViolet": return SnakeGameModel.SnakeType.Type10;
+            case "Cyan":
+            case "JPCyan": return SnakeGameModel.SnakeType.Type11;
+            case "Purple":
+            case "JPViolet": return SnakeGameModel.SnakeType.Type12;
+            case "Black":
+            case "Brown":
+            case "JPBlack": return SnakeGameModel.SnakeType.Type13;
+            case "DarkGreen":
+            case "JPDarkGreen": return SnakeGameModel.SnakeType.Type5;
+            case "White": return SnakeGameModel.SnakeType.Type7;
         }
         return SnakeGameModel.SnakeType.Type0;
     }

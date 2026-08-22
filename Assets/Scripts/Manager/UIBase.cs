@@ -83,4 +83,16 @@ public class UIBase : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void AddCallback(Action _callback)
+    {
+        if(callback != null)
+        {
+            callback += _callback;
+        }
+        else
+        {
+            callback = _callback;
+        }
+    }
 }

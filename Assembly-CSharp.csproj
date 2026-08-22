@@ -60,27 +60,35 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Panel\AddSceneItemPanel.cs" />
     <Compile Include="Assets\Scripts\SetBoundary.cs" />
+    <Compile Include="Assets\Scripts\Panel\GeneralRewardPanel.cs" />
     <Compile Include="Assets\Scripts\Panel\EvaluationGamePanel.cs" />
+    <Compile Include="Assets\Scripts\Panel\GameWinPanel.cs" />
     <Compile Include="Assets\Scripts\AB\ABbuildManager.cs" />
     <Compile Include="Assets\Scripts\language\PortugueseLanguageConfig.cs" />
     <Compile Include="Assets\Scripts\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\item\ItemBase.cs" />
     <Compile Include="Assets\Scripts\Panel\GameLoadingPanel.cs" />
     <Compile Include="Assets\Scripts\language\IndonesianLanguageConfig.cs" />
+    <Compile Include="Assets\Scripts\Panel\DailyMissionPanel.cs" />
     <Compile Include="Assets\Scripts\EventSystem\EventManager.cs" />
     <Compile Include="Assets\Scripts\Ad\RewardAdButton.cs" />
     <Compile Include="Assets\Scripts\Manager\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\Panel\LobbyScenePanel.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Hint.cs" />
+    <Compile Include="Assets\Scripts\Manager\OtherRewardTaskView.cs" />
     <Compile Include="Assets\Scripts\EventSystem\GameEvent.cs" />
+    <Compile Include="Assets\Scripts\Tx\TxBtn.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeLevelConfig.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeSpriteSet.cs" />
+    <Compile Include="Assets\Scripts\Manager\OtherRewardTask.cs" />
     <Compile Include="Assets\Scripts\Panel\GameScenePanel.cs" />
     <Compile Include="Assets\Scripts\Panel\PlayerInfoUI.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeWayBlockerView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\BoardZoomController.cs" />
+    <Compile Include="Assets\Scripts\Panel\GameLosePanel.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeHeadView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameController.cs" />
     <Compile Include="Assets\Scripts\language\MultilingualSprite.cs" />
@@ -88,6 +96,8 @@
     <Compile Include="Assets\Scripts\SnakeGame\SnakeBlackHoleView.cs" />
     <Compile Include="Assets\Scripts\AB\ABResManager.cs" />
     <Compile Include="Assets\Scripts\Effect\GoldFlyControl.cs" />
+    <Compile Include="Assets\Scripts\Panel\SurpriseRewardPanel.cs" />
+    <Compile Include="Assets\Scripts\Manager\OtherRewardTaskInfo.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameModel.cs" />
     <Compile Include="Assets\Scripts\Effect\FlickerStar.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItemBase.cs" />
@@ -98,6 +108,7 @@
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_AutoClick.cs" />
     <Compile Include="Assets\Scripts\NetworkChecker\NetworkChecker.cs" />
+    <Compile Include="Assets\Scripts\Panel\SurpriseRewardTimer.cs" />
     <Compile Include="Assets\Scripts\AB\SwitchAorBSprite.cs" />
     <Compile Include="Assets\Scripts\language\LanguageManager.cs" />
     <Compile Include="Assets\Scripts\NetworkChecker\NetworkCheckerPanel.cs" />
@@ -108,6 +119,7 @@
     <Compile Include="Assets\Scripts\language\MultilingualText.cs" />
     <Compile Include="Assets\Scripts\Manager\EncryptSDKKey.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeTraceView.cs" />
+    <Compile Include="Assets\Scripts\Panel\GameBubbleController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Level\lv119.txt" />

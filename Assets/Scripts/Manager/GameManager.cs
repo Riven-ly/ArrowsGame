@@ -39,17 +39,22 @@ public class GameManager : MonoBehaviour
         Input.multiTouchEnabled = true;
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public void Init()
     {
         playerInfo = GetPlayerInfo();
-        //UIManager.Instance.OpenUI<PlayerInfoUI>();
+        UIManager.Instance.OpenUI<PlayerInfoUI>();
         gameType = GameType.MainGame;
         UIManager.Instance.OpenUI<GameScenePanel>();
+    }
+
+    public void GeneralBtnAnim(Transform btnTrans)
+    {
+        btnTrans.localScale = Vector3.zero;
+        DOTween.Sequence()
+                     .AppendInterval(1.5f)
+                     .Append(btnTrans.DOScale(1.1f, 0.2f))
+                     .Append(btnTrans.DOScale(0.9f, 0.1f))
+                     .Append(btnTrans.DOScale(1f, 0.1f));
     }
 
     public string GetTimeString(float _Seconds)

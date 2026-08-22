@@ -44,6 +44,7 @@ public class AdManager : MonoBehaviour
     {
         DOTween.Sequence().AppendInterval(0.5F).AppendCallback(() =>
         {
+            EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
             _rewardCallback?.Invoke();
 
         });

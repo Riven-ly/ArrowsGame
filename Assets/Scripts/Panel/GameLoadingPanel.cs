@@ -92,12 +92,12 @@ public class GameLoadingPanel : UIBase
     IEnumerator CheckNetworkIE()
     {
         //1.网络检测
-        NetworkChecker.Instance.StartCheckNetworkStatus();
-        while (!NetworkChecker.Instance.isNetworkAvailable)
-        {
-            Debug.Log("等待网络连接");
-            yield return null;
-        }
+        //NetworkChecker.Instance.StartCheckNetworkStatus();
+        //while (!NetworkChecker.Instance.isNetworkAvailable)
+        //{
+        //    Debug.Log("等待网络连接");
+        //    yield return null;
+        //}
 
         //2.各个SDK初始化
         GameManager.appATTtype = 1;//todo
@@ -122,8 +122,12 @@ public class GameLoadingPanel : UIBase
             slider.DOValue(1f, 0.2f).SetEase(Ease.Linear);
             DoTextNumberAnim(90, 100, 0.2f);
 
-            yield return new WaitForSeconds(0.3f);
-            //GameManager.Instance.Init();
+            GameManager.Instance.Init();
+            if(ABResManager.Instance != null)
+            {
+                ABResManager.Instance.Init();
+            }
+            yield return new WaitForSeconds(0.4f);
             Hide();
         }
     }

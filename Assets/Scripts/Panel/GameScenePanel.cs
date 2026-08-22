@@ -11,8 +11,12 @@ public class GameScenePanel : UIBase
     public Text title;
     public Button settingBtn;
     public Button resetBtn;
+    public Button dailyMissionBtn;
+    public GameBubbleController gameBubbleController;
     public GameSceneItem_AutoClick gameSceneItem_AutoClick;
     public GameSceneItem_Hint gameSceneItem_Hint;
+    /// <summary>惊喜奖励弹出计时器。</summary>
+    [SerializeField] private SurpriseRewardTimer surpriseRewardTimer;
 
     /// <summary>蛇玩法模块控制器。</summary>
     public SnakeGameController snakeGameController;
@@ -36,7 +40,9 @@ public class GameScenePanel : UIBase
     private float snakeErrorFlashDuration = 0.1f;
     /// <summary>当前剩余游戏时间。</summary>
     private float remainingGameTime;
-
+    /// <summary>本次失败是否因时间耗尽。</summary>
+    private bool timeExpired;
+    private Coroutine gametimeCoroutine;
     /// <summary>
     /// 初始化安全区与生命显示引用。
     /// </summary>
@@ -49,6 +55,7 @@ public class GameScenePanel : UIBase
         snakeGameController.collisionEvent += OnSnakeCollision;
         snakeGameController.victoryEvent += OnSnakeVictory;
         snakeGameController.snakeCountChangedEvent += RefreshSnakeCount;
+        snakeGameController.snakeMoveSuccessEvent += OnSnakeMoveSuccess;
     }
 
     private void OnEnable()
@@ -70,6 +77,7 @@ public class GameScenePanel : UIBase
             snakeGameController.collisionEvent -= OnSnakeCollision;
             snakeGameController.victoryEvent -= OnSnakeVictory;
             snakeGameController.snakeCountChangedEvent -= RefreshSnakeCount;
+            snakeGameController.snakeMoveSuccessEvent -= OnSnakeMoveSuccess;
         }
     }
     /// <summary>
@@ -79,11 +87,22 @@ public class GameScenePanel : UIBase
     {
         settingBtn.onClick.AddListener(() =>
         {
-
+            UIManager.Instance.OpenUI<SettingPanel>(null, () =>
+            {
+                GameManager.IsGamePause = false;
+            });
         });
         resetBtn.onClick.AddListener(() =>
         {
             ResetGame();
+        });
+        dailyMissionBtn.onClick.AddListener(() =>
+        {
+            GameManager.IsGamePause = true;
+            UIManager.Instance.OpenUI<DailyMissionPanel>(null, () =>
+            {
+                GameManager.IsGamePause = false;
+            });
         });
     }
 
@@ -99,6 +118,7 @@ public class GameScenePanel : UIBase
         }
         if (!isGameOver)
         {
+            timeExpired = true;
             GameOver();
         }
     }
@@ -111,10 +131,14 @@ public class GameScenePanel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
-        StopCoroutine("GameTimer");
+        if(gametimeCoroutine != null)
+        {
+            StopCoroutine(gametimeCoroutine);
+        }
         DOTween.Kill(snakeError);
         snakeError.gameObject.SetActive(false);
         title.text = LanguageManager.Instance.GetText("Level") + $" {GameManager.Instance.playerInfo.level}";
+        surpriseRewardTimer.StartLevel(GameManager.Instance.playerInfo.level);
         currentLives = 3;
         remainingGameTime = gameDuration;
         snakeGameController.Initialize();
@@ -122,12 +146,16 @@ public class GameScenePanel : UIBase
         RefreshGameTime();
         RefreshSnakeCount();
         isGameOver = false;
+        timeExpired = false;
         GameManager.IsGamePause = false;
         gameSceneItem_AutoClick.Refresh();
         gameSceneItem_AutoClick.ResetEachRoundItemUseCnt();
         gameSceneItem_Hint.Refresh();
         gameSceneItem_Hint.ResetEachRoundItemUseCnt();
-        StartCoroutine(GameTimer());
+        gametimeCoroutine = StartCoroutine(GameTimer());
+        gameBubbleController.StartBubbleLoop();
+
+        dailyMissionBtn.gameObject.SetActive(GameManager.Instance.playerInfo.level >= 2);
     }
 
     /// <summary>
@@ -144,6 +172,12 @@ public class GameScenePanel : UIBase
     public void ResetGame()
     {
         Refresh();
+    }
+
+    /// <summary>处理蛇成功完成一次移动。</summary>
+    private void OnSnakeMoveSuccess()
+    {
+        surpriseRewardTimer.CheckAfterSnakeMove();
     }
 
     /// <summary>刷新剩余时间文本。</summary>
@@ -174,7 +208,13 @@ public class GameScenePanel : UIBase
         Debug.Log("蛇撞到阻挡，扣除 1 点生命并原路倒车。");
         if (currentLives <= 0)
         {
-            GameOver();
+            UIManager.Instance.OpenUIMask();
+            DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+            {
+                UIManager.Instance.HideUIMask();
+                timeExpired = false;
+                GameOver();
+            });
         }
     }
 
@@ -201,7 +241,7 @@ public class GameScenePanel : UIBase
     {
         for (int i = 0; i < lifeImages.Length; i++)
         {
-            lifeImages[i].color = i < currentLives ? new Color(1f, 0.36f, 0.42f, 1f) : new Color(0.72f, 0.72f, 0.72f, 0.35f);
+            lifeImages[i].color = i < currentLives ? new Color(1f, 1f, 1f, 1f) : new Color(0.72f, 0.72f, 0.72f, 0.35f);
         }
     }
 
@@ -214,12 +254,39 @@ public class GameScenePanel : UIBase
         }
         isGameOver = true;
         Debug.Log("蛇玩法通关：全部蛇已经离场。");
+        UIManager.Instance.OpenUI<GameWinPanel>(null, () =>
+        {
+            ResetGame();
+        });
+    }
+
+    /// <summary>按失败原因满值复活当前关卡。</summary>
+    public void ReviveGame()
+    {
+        isGameOver = false;
+        if (timeExpired)
+        {
+            remainingGameTime = gameDuration;
+            RefreshGameTime();
+        }
+        else
+        {
+            currentLives = lifeImages.Length;
+            RefreshLifeImages();
+        }
+        if (gametimeCoroutine != null)
+        {
+            StopCoroutine(gametimeCoroutine);
+        }
+        gametimeCoroutine = StartCoroutine(GameTimer());
+        snakeGameController.ResumeInput();
     }
 
     private void GameOver()
     {
         isGameOver = true;
         snakeGameController.StopInput();
+        UIManager.Instance.OpenUI<GameLosePanel>(this);
         Debug.Log("关卡失败！");
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +14,21 @@ public class SnakeBlackHoleView : MonoBehaviour
     public void Initialize()
     {
         holeImage.raycastTarget = false;
+        DOTween.Sequence().Append(holeImage.transform.DOLocalRotate(
+                  new Vector3(0, 0, 360f),
+                  2f,
+                  RotateMode.FastBeyond360
+              ).SetEase(Ease.Linear))
+              .SetTarget(holeImage.transform)
+              .SetLoops(-1);
         gameObject.SetActive(true);
+
     }
 
     /// <summary>回收黑洞对象。</summary>
     public void Recycle()
     {
+        holeImage.transform.DOKill();
         gameObject.SetActive(false);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,11 +62,11 @@ public class SnakeGameView : MonoBehaviour
     /// <summary>蛇视图列表。</summary>
     private readonly Dictionary<int, SnakeVisual> visuals = new Dictionary<int, SnakeVisual>();
     /// <summary>移动单格动画时长。</summary>
-    private const float StepDuration = 0.09f;
+    private const float StepDuration = 0.5f;
     /// <summary>蛇部件预制体基础宽度。</summary>
-    private float partBaseWidth = 100f;
+    private float partBaseWidth = 200f;
     /// <summary>蛇部件预制体基础高度。</summary>
-    private float partBaseHeight = 100f;
+    private float partBaseHeight = 200f;
     /// <summary>棋盘左右边距。</summary>
     private const float BoardPadding = 0f;
 
@@ -336,7 +337,7 @@ public class SnakeGameView : MonoBehaviour
         }
     }
 
-    /// <summary>显示指定蛇头的提示线。</summary>
+    /// <summary>显示指定蛇头的提示线并聚焦随机目标。</summary>
     public void ShowSnakeHints(List<int> snakeIds, float duration)
     {
         for (int i = 0; i < snakeIds.Count; i++)
@@ -346,6 +347,24 @@ public class SnakeGameView : MonoBehaviour
                 visuals[snakeIds[i]].headView.ShowHint(duration);
             }
         }
+        int targetIndex = Random.Range(0, snakeIds.Count);
+        if (visuals.ContainsKey(snakeIds[targetIndex]))
+        {
+            RectTransform targetHead = visuals[snakeIds[targetIndex]].headView.transform as RectTransform;
+            boardZoomController.FocusZoom();
+            FocusSnake(targetHead);
+        }
+    }
+
+    /// <summary>将棋盘滚动到指定蛇头位置。</summary>
+    private void FocusSnake(RectTransform head)
+    {
+        scrollRect.velocity = Vector2.zero;
+        Vector3 worldPosition = head.position;
+        Vector3 viewportPosition = scrollRect.viewport.InverseTransformPoint(worldPosition);
+        Vector2 targetOffset = new Vector2(-viewportPosition.x, -viewportPosition.y);
+        DOTween.Kill(scrollRect);
+        DOTween.To(() => scrollRect.content.anchoredPosition, value => scrollRect.content.anchoredPosition = value, scrollRect.content.anchoredPosition + targetOffset, 0.35f).SetTarget(scrollRect);
     }
 
     /// <summary>创建关卡中的路径阻挡器和黑洞。</summary>
@@ -467,7 +486,7 @@ public class SnakeGameView : MonoBehaviour
             else if (i == snake.cells.Count - 1)
             {
                 SnakeTailView tail = TakeTail();
-                tail.Initialize(GetSnakeSprite(snake.type).tail, () => clickAction(snake.id));
+                tail.Initialize(GetSnakeSprite(snake.type).tail, GetTailDirection(snake.cells), () => clickAction(snake.id));
                 part = tail.gameObject;
                 image = part.GetComponentInChildren<Image>(true);
             }
@@ -498,19 +517,20 @@ public class SnakeGameView : MonoBehaviour
         visual.headView = visual.parts[0].GetComponent<SnakeHeadView>();
         visuals.Add(snake.id, visual);
         UpdateSnakeVisual(visual, snake);
+        UpdateSnakeDirections(visual, snake.cells);
     }
 
-    /// <summary>固定真实头身尾的显示层级，蛇尾在最下、蛇头在最上。</summary>
+    /// <summary>按尾到头重排交错节点层级，确保蛇尾在底层、蛇头在顶层。</summary>
     private void SetRealPartSiblingOrder(SnakeVisual visual)
     {
         int lastPartIndex = visual.parts.Count - 1;
-        for (int i = 0; i < visual.parts.Count; i++)
+        for (int i = lastPartIndex; i >= 0; i--)
         {
             visual.parts[i].transform.SetSiblingIndex((lastPartIndex - i) * 2);
-        }
-        for (int i = 0; i < visual.fillers.Count; i++)
-        {
-            visual.fillers[i].transform.SetSiblingIndex((visual.fillers.Count - 1 - i) * 2 + 1);
+            if (i > 0)
+            {
+                visual.fillers[i - 1].transform.SetSiblingIndex((lastPartIndex - i) * 2 + 1);
+            }
         }
     }
 
@@ -518,6 +538,22 @@ public class SnakeGameView : MonoBehaviour
     private SnakeSpriteSet GetSnakeSprite(SnakeGameModel.SnakeType type)
     {
         return snakeSpriteSets[(int)type];
+    }
+
+    /// <summary>根据尾部最后两格计算蛇尾朝向。</summary>
+    private SnakeGameModel.MoveDirection GetTailDirection(List<Vector2Int> cells)
+    {
+        Vector2Int offset = cells[cells.Count - 1] - cells[cells.Count - 2];
+        int x = Mathf.Clamp(offset.x, -1, 1);
+        int y = Mathf.Clamp(offset.y, -1, 1);
+        if (x > 0 && y > 0) return SnakeGameModel.MoveDirection.UpRight;
+        if (x < 0 && y > 0) return SnakeGameModel.MoveDirection.UpLeft;
+        if (x > 0 && y < 0) return SnakeGameModel.MoveDirection.DownRight;
+        if (x < 0 && y < 0) return SnakeGameModel.MoveDirection.DownLeft;
+        if (x > 0) return SnakeGameModel.MoveDirection.Right;
+        if (x < 0) return SnakeGameModel.MoveDirection.Left;
+        if (y > 0) return SnakeGameModel.MoveDirection.Up;
+        return SnakeGameModel.MoveDirection.Down;
     }
 
     /// <summary>取用一个蛇头对象。</summary>
@@ -566,32 +602,104 @@ public class SnakeGameView : MonoBehaviour
         }
     }
 
-    /// <summary>移动一格并同步整条蛇的节点位置。</summary>
+    /// <summary>移动一格：交错节点按头、补间、身体的顺序追随前一个节点。</summary>
     private IEnumerator MoveSnakeTo(SnakeVisual visual, SnakeGameModel.SnakeData snake, List<Vector2Int> nextCells)
     {
         Vector2Int[] targetCells = nextCells.ToArray();
-        Vector2[] startPositions = new Vector2[nextCells.Count];
-        Vector2[] endPositions = new Vector2[nextCells.Count];
-        for (int i = 0; i < nextCells.Count; i++)
+        int nodeCount = visual.root.childCount;
+        RectTransform[] nodes = new RectTransform[nodeCount];
+        Vector2[] startPositions = new Vector2[nodeCount];
+        Vector2[] endPositions = new Vector2[nodeCount];
+        for (int i = 0; i < nodeCount; i++)
         {
-            startPositions[i] = visual.parts[i].GetComponent<RectTransform>().anchoredPosition;
-            endPositions[i] = CellToPosition(targetCells[i]);
+            nodes[i] = visual.root.GetChild(nodeCount - 1 - i) as RectTransform;
         }
-        float elapsed = 0f;
-        while (elapsed < StepDuration)
+
+        Vector2 headStartPosition = nodes[0].anchoredPosition;
+        Vector2 headTargetPosition = CellToPosition(targetCells[0]);
+        for (int step = 0; step < 2; step++)
         {
-            elapsed += Time.unscaledDeltaTime;
-            float t = Mathf.Clamp01(elapsed / StepDuration);
-            for (int i = 0; i < visual.bodyImages.Count; i++)
+            for (int i = 0; i < nodeCount; i++)
             {
-                visual.parts[i].GetComponent<RectTransform>().anchoredPosition = Vector2.LerpUnclamped(startPositions[i], endPositions[i], t);
+                startPositions[i] = nodes[i].anchoredPosition;
             }
-            UpdateFillers(visual);
-            yield return null;
+
+            endPositions[0] = Vector2.LerpUnclamped(headStartPosition, headTargetPosition, (step + 1) * 0.5f);
+            for (int i = 1; i < nodeCount; i++)
+            {
+                endPositions[i] = startPositions[i - 1];
+            }
+
+            float elapsed = 0f;
+            float halfStepDuration = StepDuration * 0.5f;
+            while (elapsed < halfStepDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / halfStepDuration);
+                for (int i = 0; i < nodeCount; i++)
+                {
+                    nodes[i].anchoredPosition = Vector2.LerpUnclamped(startPositions[i], endPositions[i], t);
+                }
+                if (t < 1f)
+                {
+                    yield return null;
+                }
+            }
+            UpdateSnakeDirections(visual, targetCells);
         }
+
         snake.cells.Clear();
         snake.cells.AddRange(targetCells);
         UpdateSnakeVisual(visual, snake);
+        UpdateSnakeDirections(visual, snake.cells);
+    }
+
+    /// <summary>按头到尾的交错节点顺序，以前一个节点到当前节点的方向刷新全部部件。</summary>
+    private void UpdateSnakeDirections(SnakeVisual visual, IList<Vector2Int> cells)
+    {
+        visual.headView.SetDirection(GetDirection(cells[0] - cells[1]));
+        Transform previous = visual.parts[0].transform;
+        for (int i = 0; i < visual.fillers.Count; i++)
+        {
+            SnakeBodyView filler = visual.fillers[i].GetComponent<SnakeBodyView>();
+            filler.SetDirection(GetDirectionFromNodes(previous, filler.transform));
+            previous = filler.transform;
+
+            Transform part = visual.parts[i + 1].transform;
+            if (i < visual.parts.Count - 2)
+            {
+                SnakeBodyView body = part.GetComponent<SnakeBodyView>();
+                body.SetDirection(GetDirectionFromNodes(previous, body.transform));
+            }
+            else
+            {
+                SnakeTailView tail = part.GetComponent<SnakeTailView>();
+                tail.SetDirection(GetDirectionFromNodes(previous, tail.transform));
+            }
+            previous = part;
+        }
+    }
+
+    /// <summary>根据前后相邻节点的局部位置计算当前节点朝向。</summary>
+    private SnakeGameModel.MoveDirection GetDirectionFromNodes(Transform previous, Transform current)
+    {
+        Vector2 offset = current.localPosition - previous.localPosition;
+        return GetDirection(new Vector2Int(Mathf.RoundToInt(offset.x), Mathf.RoundToInt(offset.y)));
+    }
+
+    /// <summary>将格子坐标偏移转换为移动方向。</summary>
+    private SnakeGameModel.MoveDirection GetDirection(Vector2Int offset)
+    {
+        int x = Mathf.Clamp(offset.x, -1, 1);
+        int y = Mathf.Clamp(offset.y, -1, 1);
+        if (x > 0 && y > 0) return SnakeGameModel.MoveDirection.UpRight;
+        if (x < 0 && y > 0) return SnakeGameModel.MoveDirection.UpLeft;
+        if (x > 0 && y < 0) return SnakeGameModel.MoveDirection.DownRight;
+        if (x < 0 && y < 0) return SnakeGameModel.MoveDirection.DownLeft;
+        if (x > 0) return SnakeGameModel.MoveDirection.Right;
+        if (x < 0) return SnakeGameModel.MoveDirection.Left;
+        if (y > 0) return SnakeGameModel.MoveDirection.Up;
+        return SnakeGameModel.MoveDirection.Down;
     }
 
     /// <summary>刷新蛇的格子位置、方向和层级。</summary>

@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class ABResManager : MonoBehaviour
 {
-    public GameObject txElementManangerPrefab;
+    public static ABResManager Instance;
+
     public GameObject TxElementBtnPrefab;
-    public GameObject BobaoPrefab;
 
     public Sprite diamondsSprite;
     public Sprite diamondRerardIconsSprite;
 
     //新的UI界面
     public List<GameObject> uiPanel;
+    private void Awake()
+    {
+        Instance = this;
+    }
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         UpdateDiamondsUI();
         InitTxElementPanel();
@@ -36,7 +40,7 @@ public class ABResManager : MonoBehaviour
 
     private void InitTxElementPanel()
     {
-        Instantiate(txElementManangerPrefab);
+        //Instantiate(txElementManangerPrefab);
         Instantiate(TxElementBtnPrefab, UIManager.Instance.GetUI<PlayerInfoUI>().txTrans);
     }
 }
