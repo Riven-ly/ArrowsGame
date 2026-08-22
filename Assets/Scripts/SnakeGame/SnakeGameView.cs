@@ -127,7 +127,7 @@ public class SnakeGameView : MonoBehaviour
         SnakeVisual visual = visuals[snake.id];
         for (int i = layouts.Count - 2; i >= 0; i--)
         {
-            yield return MoveSnakeTo(visual, snake, layouts[i]);
+            yield return MoveSnakeTo(visual, snake, layouts[i], true);
         }
     }
 
@@ -603,7 +603,7 @@ public class SnakeGameView : MonoBehaviour
     }
 
     /// <summary>移动一格：交错节点按头、补间、身体的顺序追随前一个节点。</summary>
-    private IEnumerator MoveSnakeTo(SnakeVisual visual, SnakeGameModel.SnakeData snake, List<Vector2Int> nextCells)
+    private IEnumerator MoveSnakeTo(SnakeVisual visual, SnakeGameModel.SnakeData snake, List<Vector2Int> nextCells, bool moveBackward = false)
     {
         Vector2Int[] targetCells = nextCells.ToArray();
         int nodeCount = visual.root.childCount;
@@ -612,11 +612,13 @@ public class SnakeGameView : MonoBehaviour
         Vector2[] endPositions = new Vector2[nodeCount];
         for (int i = 0; i < nodeCount; i++)
         {
-            nodes[i] = visual.root.GetChild(nodeCount - 1 - i) as RectTransform;
+            int childIndex = moveBackward ? i : nodeCount - 1 - i;
+            nodes[i] = visual.root.GetChild(childIndex) as RectTransform;
         }
 
-        Vector2 headStartPosition = nodes[0].anchoredPosition;
-        Vector2 headTargetPosition = CellToPosition(targetCells[0]);
+        int leadingPartIndex = moveBackward ? targetCells.Length - 1 : 0;
+        Vector2 leadStartPosition = nodes[0].anchoredPosition;
+        Vector2 leadTargetPosition = CellToPosition(targetCells[leadingPartIndex]);
         for (int step = 0; step < 2; step++)
         {
             for (int i = 0; i < nodeCount; i++)
@@ -624,7 +626,7 @@ public class SnakeGameView : MonoBehaviour
                 startPositions[i] = nodes[i].anchoredPosition;
             }
 
-            endPositions[0] = Vector2.LerpUnclamped(headStartPosition, headTargetPosition, (step + 1) * 0.5f);
+            endPositions[0] = Vector2.LerpUnclamped(leadStartPosition, leadTargetPosition, (step + 1) * 0.5f);
             for (int i = 1; i < nodeCount; i++)
             {
                 endPositions[i] = startPositions[i - 1];
@@ -645,7 +647,6 @@ public class SnakeGameView : MonoBehaviour
                     yield return null;
                 }
             }
-            UpdateSnakeDirections(visual, targetCells);
         }
 
         snake.cells.Clear();
