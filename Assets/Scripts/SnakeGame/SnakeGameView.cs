@@ -62,7 +62,7 @@ public class SnakeGameView : MonoBehaviour
     /// <summary>蛇视图列表。</summary>
     private readonly Dictionary<int, SnakeVisual> visuals = new Dictionary<int, SnakeVisual>();
     /// <summary>移动单格动画时长。</summary>
-    private const float StepDuration = 0.5f;
+    private const float StepDuration = 0.06f;
     /// <summary>蛇部件预制体基础宽度。</summary>
     private float partBaseWidth = 200f;
     /// <summary>蛇部件预制体基础高度。</summary>
@@ -647,6 +647,7 @@ public class SnakeGameView : MonoBehaviour
                     yield return null;
                 }
             }
+            UpdateSnakeDirections(visual, targetCells);
         }
 
         snake.cells.Clear();
@@ -655,30 +656,41 @@ public class SnakeGameView : MonoBehaviour
         UpdateSnakeDirections(visual, snake.cells);
     }
 
-    /// <summary>按头到尾的交错节点顺序，以前一个节点到当前节点的方向刷新全部部件。</summary>
+    /// <summary>按前进链路刷新头、身体、补间和尾的朝向。</summary>
     private void UpdateSnakeDirections(SnakeVisual visual, IList<Vector2Int> cells)
     {
-        visual.headView.SetDirection(GetDirection(cells[0] - cells[1]));
-        Transform previous = visual.parts[0].transform;
-        for (int i = 0; i < visual.fillers.Count; i++)
+        int nodeCount = visual.root.childCount;
+        Transform previous = null;
+        for (int i = 0; i < nodeCount; i++)
         {
-            SnakeBodyView filler = visual.fillers[i].GetComponent<SnakeBodyView>();
-            filler.SetDirection(GetDirectionFromNodes(previous, filler.transform));
-            previous = filler.transform;
-
-            Transform part = visual.parts[i + 1].transform;
-            if (i < visual.parts.Count - 2)
+            Transform current = visual.root.GetChild(nodeCount - 1 - i);
+            if (previous != null)
             {
-                SnakeBodyView body = part.GetComponent<SnakeBodyView>();
-                body.SetDirection(GetDirectionFromNodes(previous, body.transform));
+                SetNodeDirection(current, GetDirectionFromNodes(previous, current));
             }
-            else
-            {
-                SnakeTailView tail = part.GetComponent<SnakeTailView>();
-                tail.SetDirection(GetDirectionFromNodes(previous, tail.transform));
-            }
-            previous = part;
+            previous = current;
         }
+
+        visual.headView.SetDirection(GetDirection(cells[0] - cells[1]));
+    }
+
+    private void SetNodeDirection(Transform node, SnakeGameModel.MoveDirection direction)
+    {
+        SnakeHeadView head = node.GetComponent<SnakeHeadView>();
+        if (head != null)
+        {
+            head.SetDirection(direction);
+            return;
+        }
+
+        SnakeTailView tail = node.GetComponent<SnakeTailView>();
+        if (tail != null)
+        {
+            tail.SetDirection(direction);
+            return;
+        }
+
+        node.GetComponent<SnakeBodyView>().SetDirection(direction);
     }
 
     /// <summary>根据前后相邻节点的局部位置计算当前节点朝向。</summary>

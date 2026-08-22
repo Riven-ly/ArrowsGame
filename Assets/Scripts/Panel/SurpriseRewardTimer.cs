@@ -27,7 +27,7 @@ public class SurpriseRewardTimer : MonoBehaviour
     /// <summary>开始当前关卡的奖励计时。</summary>
     public void StartLevel(int level)
     {
-        enabledForLevel = level > 0;
+        enabledForLevel = level > 2;
         elapsedTime = 0f;
         nextRewardTime = firstRewardDelay;
         rewardPending = false;

@@ -172,11 +172,14 @@ public class SnakeGameController : MonoBehaviour
             snake.removed = true;
             view.NotifySnakeRemoved();
             snakeCountChangedEvent?.Invoke();
-            snakeMoveSuccessEvent?.Invoke();
             if (AllSnakesRemoved())
             {
                 inputEnabled = false;
                 victoryEvent?.Invoke();
+            }
+            else
+            {
+                snakeMoveSuccessEvent?.Invoke();
             }
         }
         movingSnakeIds.Remove(snake.id);
