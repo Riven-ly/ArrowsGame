@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class MultilingualSpriteInfo
 {
     public MultilingualType Key; 
-    public Sprite Value;     
+    public Sprite Value;
+    public UnityEngine.Vector3 vector3;
 }
 
 public class MultilingualSprite : MonoBehaviour
@@ -34,6 +35,7 @@ public class MultilingualSprite : MonoBehaviour
             {
                 img.sprite = info.Value;
                 img.SetNativeSize();
+                img.transform.localPosition = info.vector3;
                 break;
             }
         }

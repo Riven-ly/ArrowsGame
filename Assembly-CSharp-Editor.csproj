@@ -64,6 +64,20 @@
     <Compile Include="Assets\Editor\CustomToolEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\SolarEngineNet\SolarEnginePlugins\ODMInfo\Editor\Dependencies.xml" />
+    <None Include="Assets\SolarEngineNet\iOS\Editor\Dependencies.xml" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.IOSResolver.dll" />
+    <None Include="Assets\MaxSdk\AppLovin\Editor\Dependencies.xml" />
+    <None Include="Assets\Adjust\Native\Editor\Dependencies.xml" />
+    <None Include="Assets\SolarEngineNet\SolarEnginePlugins\Oaid\Editor\Dependencies.xml" />
+    <None Include="Assets\ExternalDependencyManager\Editor\Google.VersionHandler.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.PackageManagerResolver.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.VersionHandlerImpl.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.186_manifest.txt" />
+    <None Include="Assets\SolarEngineNet\Android\Editor\Dependencies.xml" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.JarResolver.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -462,6 +476,42 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MiniGameRemoteConfig">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\MiniGameRemoteConfig.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SolarEngineMiniGames">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineMiniGames.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.VersionHandler">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.VersionHandler.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SolarEngineUnityTool">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineUnityTool.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.PackageManagerResolver">
+      <HintPath>Assets\ExternalDependencyManager\Editor\1.2.186\Google.PackageManagerResolver.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.IOSResolver">
+      <HintPath>Assets\ExternalDependencyManager\Editor\1.2.186\Google.IOSResolver.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.VersionHandlerImpl">
+      <HintPath>Assets\ExternalDependencyManager\Editor\1.2.186\Google.VersionHandlerImpl.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.JarResolver">
+      <HintPath>Assets\ExternalDependencyManager\Editor\1.2.186\Google.JarResolver.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="solarenginewindows">
+      <HintPath>Assets\Plugins\SolarEngine\Windows\solarenginewindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -1177,6 +1227,46 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{192E927E-EC2B-A951-9404-E8EEDE8280B5}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="AdjustSdk.Editor.csproj">
+      <Project>{A1532F76-5980-6AD6-DAC2-5A74D23DF41B}</Project>
+      <Name>AdjustSdk.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRDebugger.csproj">
+      <Project>{A08C0395-7AE7-C8CC-4A50-E9F8F57FEAF7}</Project>
+      <Name>StompyRobot.SRDebugger</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRDebugger.Editor.csproj">
+      <Project>{40585CE4-624A-B578-909A-9F7E96C723F2}</Project>
+      <Name>StompyRobot.SRDebugger.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="SolarEngineSDK.Editor.csproj">
+      <Project>{5D41111B-FA69-843A-D6EC-E0B8AD7CE4B9}</Project>
+      <Name>SolarEngineSDK.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="MaxSdk.Scripts.IntegrationManager.Editor.csproj">
+      <Project>{5AA02DDE-0C9E-3FC8-CC58-B8DB765FA1CB}</Project>
+      <Name>MaxSdk.Scripts.IntegrationManager.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="SolarEngineSDK.csproj">
+      <Project>{E4159D77-6265-1F84-A6F4-E37427E4FAE2}</Project>
+      <Name>SolarEngineSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="MaxSdk.Scripts.csproj">
+      <Project>{1D22FAF3-8B87-6B54-A205-CA38432A5025}</Project>
+      <Name>MaxSdk.Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRF.csproj">
+      <Project>{FE04968A-C25A-5C01-8AD6-F3CB8179A1CE}</Project>
+      <Name>StompyRobot.SRF</Name>
+    </ProjectReference>
+    <ProjectReference Include="AdjustSdk.Scripts.csproj">
+      <Project>{AD1F7E91-FB32-30D4-33ED-DAC24605C50B}</Project>
+      <Name>AdjustSdk.Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRF.Editor.csproj">
+      <Project>{5FB3F7A9-BC16-93B9-1B5A-4A013A63AA11}</Project>
+      <Name>StompyRobot.SRF.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

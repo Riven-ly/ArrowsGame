@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Hint.cs" />
     <Compile Include="Assets\Scripts\Manager\OtherRewardTaskView.cs" />
     <Compile Include="Assets\Scripts\EventSystem\GameEvent.cs" />
+    <Compile Include="Assets\Scripts\Panel\GuoChangPanel.cs" />
     <Compile Include="Assets\Scripts\Tx\TxBtn.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeLevelConfig.cs" />
@@ -100,7 +101,9 @@
     <Compile Include="Assets\Scripts\Tx\TxFailedPanel.cs" />
     <Compile Include="Assets\Scripts\Panel\Guide4Panel.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\BoardZoomController.cs" />
+    <Compile Include="Assets\StompyRobot\SROptions\SROptions.cs" />
     <Compile Include="Assets\Scripts\Panel\GameLosePanel.cs" />
+    <Compile Include="Assets\Scripts\Manager\OtherSdkManager.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeHeadView.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameController.cs" />
     <Compile Include="Assets\Scripts\language\MultilingualSprite.cs" />
@@ -110,6 +113,8 @@
     <Compile Include="Assets\Scripts\AB\ABResManager.cs" />
     <Compile Include="Assets\Scripts\Tx\TxPanelCell.cs" />
     <Compile Include="Assets\Scripts\Effect\GoldFlyControl.cs" />
+    <Compile Include="Assets\StompyRobot\SROptions\SROptions.Test.cs" />
+    <Compile Include="Assets\Scripts\Ad\ApplovinMaxRewardOperator.cs" />
     <Compile Include="Assets\Scripts\Tx\TxHistoryCell.cs" />
     <Compile Include="Assets\Scripts\Panel\SurpriseRewardPanel.cs" />
     <Compile Include="Assets\Scripts\Manager\OtherRewardTaskInfo.cs" />
@@ -122,9 +127,11 @@
     <Compile Include="Assets\Scripts\Panel\SettingPanel.cs" />
     <Compile Include="Assets\Scripts\Manager\AudioManager.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeTailView.cs" />
+    <Compile Include="Assets\Scripts\Ad\ApplovinMaxInterstitialOperator.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Tx\TxManager.cs" />
     <Compile Include="Assets\Scripts\Panel\Guide6Panel.cs" />
+    <Compile Include="Assets\StompyRobot\SROptions\SROptions.Attributes.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_AutoClick.cs" />
     <Compile Include="Assets\Scripts\NetworkChecker\NetworkChecker.cs" />
     <Compile Include="Assets\Scripts\Panel\SurpriseRewardTimer.cs" />
@@ -246,6 +253,7 @@
     <None Include="Assets\Resources\Level\lv858.txt" />
     <None Include="Assets\Resources\Level\lv901.txt" />
     <None Include="Assets\Resources\Level\lv481.txt" />
+    <None Include="Assets\Adjust\Native\Android\AdjustAndroidManifest.xml" />
     <None Include="Assets\Resources\Level\lv413.txt" />
     <None Include="Assets\Resources\Level\lv784.txt" />
     <None Include="Assets\Resources\Level\lv899.txt" />
@@ -805,6 +813,7 @@
     <None Include="Assets\Resources\Level\lv59.txt" />
     <None Include="Assets\Resources\Level\lv454.txt" />
     <None Include="Assets\Resources\Level\lv121.txt" />
+    <None Include="Assets\MaxSdk\Mediation\MediationAdapters.txt" />
     <None Include="Assets\Resources\Level\lv128.txt" />
     <None Include="Assets\Resources\Level\lv68.txt" />
     <None Include="Assets\Resources\Level\lv493.txt" />
@@ -818,6 +827,7 @@
     <None Include="Assets\Resources\Level\lv760.txt" />
     <None Include="Assets\Resources\Level\lv674.txt" />
     <None Include="Assets\Resources\Level\lv647.txt" />
+    <None Include="Assets\SolarEngine\MainLand\se_mainland.txt" />
     <None Include="Assets\Resources\Level\lv390.txt" />
     <None Include="Assets\Resources\Level\lv164.txt" />
     <None Include="Assets\Resources\Level\lv634.txt" />
@@ -847,6 +857,7 @@
     <None Include="Assets\Resources\Level\lv690.txt" />
     <None Include="Assets\Resources\Level\lv910.txt" />
     <None Include="Assets\Resources\Level\lv744.txt" />
+    <None Include="Assets\StompyRobot\SROptions\link.xml" />
     <None Include="Assets\Resources\Level\lv660.txt" />
     <None Include="Assets\Resources\Level\lv557.txt" />
     <None Include="Assets\Resources\Level\lv115.txt" />
@@ -1484,6 +1495,22 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MiniGameRemoteConfig">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\MiniGameRemoteConfig.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SolarEngineMiniGames">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineMiniGames.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SolarEngineUnityTool">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineUnityTool.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="solarenginewindows">
+      <HintPath>Assets\Plugins\SolarEngine\Windows\solarenginewindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
@@ -2171,6 +2198,46 @@
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{7F8F4B9B-8760-E31D-C034-0D2E7AA0C016}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="AdjustSdk.Editor.csproj">
+      <Project>{A1532F76-5980-6AD6-DAC2-5A74D23DF41B}</Project>
+      <Name>AdjustSdk.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRDebugger.csproj">
+      <Project>{A08C0395-7AE7-C8CC-4A50-E9F8F57FEAF7}</Project>
+      <Name>StompyRobot.SRDebugger</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRDebugger.Editor.csproj">
+      <Project>{40585CE4-624A-B578-909A-9F7E96C723F2}</Project>
+      <Name>StompyRobot.SRDebugger.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="SolarEngineSDK.Editor.csproj">
+      <Project>{5D41111B-FA69-843A-D6EC-E0B8AD7CE4B9}</Project>
+      <Name>SolarEngineSDK.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="MaxSdk.Scripts.IntegrationManager.Editor.csproj">
+      <Project>{5AA02DDE-0C9E-3FC8-CC58-B8DB765FA1CB}</Project>
+      <Name>MaxSdk.Scripts.IntegrationManager.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="SolarEngineSDK.csproj">
+      <Project>{E4159D77-6265-1F84-A6F4-E37427E4FAE2}</Project>
+      <Name>SolarEngineSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="MaxSdk.Scripts.csproj">
+      <Project>{1D22FAF3-8B87-6B54-A205-CA38432A5025}</Project>
+      <Name>MaxSdk.Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRF.csproj">
+      <Project>{FE04968A-C25A-5C01-8AD6-F3CB8179A1CE}</Project>
+      <Name>StompyRobot.SRF</Name>
+    </ProjectReference>
+    <ProjectReference Include="AdjustSdk.Scripts.csproj">
+      <Project>{AD1F7E91-FB32-30D4-33ED-DAC24605C50B}</Project>
+      <Name>AdjustSdk.Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRF.Editor.csproj">
+      <Project>{5FB3F7A9-BC16-93B9-1B5A-4A013A63AA11}</Project>
+      <Name>StompyRobot.SRF.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

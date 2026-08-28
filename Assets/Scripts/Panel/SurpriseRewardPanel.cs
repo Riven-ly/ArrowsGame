@@ -18,6 +18,8 @@ public class SurpriseRewardPanel : UIBase
     private List<ItemBase> itemBase;
 
     private string page_id = "SurpriseRewardPanel";
+    public static int noThanksCount = 0;
+    private bool isSurprise = false;
     private void Awake()
     {
         RectTransform rect = root.GetComponent<RectTransform>();
@@ -44,8 +46,12 @@ public class SurpriseRewardPanel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
+        if(data != null)
+        {
+            isSurprise = (bool)data;
+        }
 
-        if(itemDatas == null)
+        if (itemDatas == null)
         {
             itemDatas = new List<ItemData>();
             itemDatas.Add(new ItemData(ItemType.GoldDui, Random.Range(200, 401)));
@@ -71,6 +77,10 @@ public class SurpriseRewardPanel : UIBase
 
     private void AdsCallback()
     {
+        if(isSurprise)
+        {
+            noThanksCount = 0;
+        }
         AddCallback(() =>
         {
             UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas, () =>
@@ -83,6 +93,17 @@ public class SurpriseRewardPanel : UIBase
 
     private void CollectClick()
     {
+        if(isSurprise)
+        {
+            noThanksCount++;
+            Debug.Log("noThanksCount:" + noThanksCount);
+            if (noThanksCount >= 3)
+            {
+                noThanksCount = 0;
+                AdManager.Instance.OnClickInterstitialAd("SurpriseRewardPanel");
+            }
+        }
+
         AddCallback(() =>
         {
             GameManager.IsGamePause = false;

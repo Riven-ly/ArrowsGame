@@ -129,6 +129,6 @@ public static class EnglishLanguageConfig
         {"Wh", "V2l0aGRyYXdhbA=="},//Withdrawal 
         {"wh", "d2l0aGRyYXdhbA=="},//withdrawal
         {"Bl", "QmFsYW5jZQ=="},//Balance    
-        {"Pm", "UGF5bWF4"},//Paymax    
+
     };
 }

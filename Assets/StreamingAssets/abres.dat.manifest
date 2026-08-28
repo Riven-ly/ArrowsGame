@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 76034250
+CRC: 1457289428
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dd9159fafafbdccd521de31ddb7f8126
+    Hash: e8c894cb853bb7c01c423cea92d58e2e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7a45916d736a44768c989a6ba79fb919
+    Hash: 0ebb9bc63e8a878e3254f35f93b430c8
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: dd9159fafafbdccd521de31ddb7f8126
+    Hash: e8c894cb853bb7c01c423cea92d58e2e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -61,6 +61,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 98b940b3e7ff4374ba1ee95778aa8b85, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: bcf255b0bcb076a42b2c3d1c5b6fba68, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 6c71d011e83f7364695de01e302ac52a, type: 3}
@@ -91,6 +93,8 @@ ClassTypes:
 - Class: 225
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: MultilingualSpriteInfo
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
@@ -119,41 +123,52 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/ABRes/TxElement/Texture/anniu2.png
-- Assets/ABRes/TxElement/Texture/failed/tanchuang.png
 - Assets/ABRes/TxElement/Texture/failed/Withdrawalfailed.png
-- Assets/ABRes/TxElement/Texture/tips/x.png
-- Assets/ABRes/TxElement/Prefab/TxFailedPanel.prefab
-- Assets/ABRes/TxElement/Texture/paypal.png
 - Assets/ABRes/ABResManager/chaopiao.png
+- Assets/ABRes/TxElement/Texture/language/SUCCESS.png
 - Assets/ABRes/TxElement/Prefab/TxAccountPanel.prefab
+- Assets/ABRes/TxElement/Texture/language/SUCCESS-pty.png
 - Assets/ABRes/TxElement/Texture/History/di.png
 - Assets/ABRes/TxElement/Texture/lishijilu.png
-- Assets/ABRes/TxElement/Texture/records-tanchuang.png
-- Assets/ABRes/TxElement/Texture/jine.png
-- Assets/ABRes/ABResManager/ABResManager.prefab
 - Assets/ABRes/TxElement/Texture/tips/hua-1 1.png
-- Assets/ABRes/TxElement/Prefab/TxTipsPanel.prefab
-- Assets/ABRes/TxElement/Texture/anniu.png
-- Assets/ABRes/TxElement/Texture/Account/tanchuang.png
-- Assets/ABRes/TxElement/Texture/duigou.png
-- Assets/ABRes/TxElement/Texture/History/paypal.png
-- Assets/ABRes/TxElement/Texture/Account/shurukuang.png
+- Assets/ABRes/TxElement/Texture/failed/Withdrawalfailed-yn.png
 - Assets/ABRes/TxElement/Texture/shuoming.png
-- Assets/ABRes/TxElement/Texture/tips/faq-tanchuang.png
+- Assets/ABRes/TxElement/Texture/duigou.png
 - Assets/ABRes/TxElement/Texture/t.png
-- Assets/ABRes/TxElement/Texture/neirong-di.png
-- Assets/ABRes/TxElement/Texture/faq-tanchuang.png
-- Assets/ABRes/TxElement/Texture/bg.png
+- Assets/ABRes/TxElement/Texture/failed/Withdrawalfailed-pty.png
+- Assets/ABRes/TxElement/Texture/language/records-pty.png
 - Assets/ABRes/TxElement/Prefab/TxSucceedPanel.prefab
 - Assets/ABRes/TxElement/Texture/fanhui.png
 - Assets/ABRes/ABResManager/chaopiaodui.png
 - Assets/ABRes/TxElement/Prefab/TxBtn.prefab
-- Assets/ABRes/TxElement/Prefab/TxManager.prefab
-- Assets/ABRes/TxElement/Texture/Account/paypal.png
 - Assets/ABRes/TxElement/Prefab/TxPanelCell.prefab
+- Assets/ABRes/TxElement/Texture/Account/paypal.png
 - Assets/ABRes/TxElement/Texture/hua-2.png
-- Assets/ABRes/TxElement/Texture/beishu.png
+- Assets/ABRes/TxElement/Texture/failed/tanchuang.png
 - Assets/ABRes/TxElement/Texture/dangwei-di.png
 - Assets/ABRes/TxElement/Prefab/TxHistoryPanel.prefab
+- Assets/ABRes/TxElement/Texture/language/SUCCESS-yn.png
+- Assets/ABRes/TxElement/Texture/tips/x.png
+- Assets/ABRes/TxElement/Prefab/TxFailedPanel.prefab
+- Assets/ABRes/TxElement/Texture/paypal.png
+- Assets/ABRes/TxElement/Texture/language/records.png
+- Assets/ABRes/TxElement/Texture/records-tanchuang.png
+- Assets/ABRes/TxElement/Texture/language/faq-pty.png
+- Assets/ABRes/TxElement/Texture/jine.png
+- Assets/ABRes/ABResManager/ABResManager.prefab
+- Assets/ABRes/TxElement/Texture/language/faq.png
+- Assets/ABRes/TxElement/Prefab/TxTipsPanel.prefab
+- Assets/ABRes/TxElement/Texture/anniu.png
+- Assets/ABRes/TxElement/Texture/Account/tanchuang.png
+- Assets/ABRes/TxElement/Texture/History/paypal.png
+- Assets/ABRes/TxElement/Texture/Account/shurukuang.png
+- Assets/ABRes/TxElement/Texture/language/faq-yn.png
+- Assets/ABRes/TxElement/Texture/tips/faq-tanchuang.png
+- Assets/ABRes/TxElement/Texture/neirong-di.png
+- Assets/ABRes/TxElement/Texture/faq-tanchuang.png
+- Assets/ABRes/TxElement/Texture/bg.png
+- Assets/ABRes/TxElement/Texture/language/records-yn.png
+- Assets/ABRes/TxElement/Prefab/TxManager.prefab
+- Assets/ABRes/TxElement/Texture/beishu.png
 - Assets/ABRes/TxElement/Prefab/TxPanel.prefab
 Dependencies: []

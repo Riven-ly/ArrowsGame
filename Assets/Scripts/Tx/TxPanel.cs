@@ -96,9 +96,9 @@ public class TxPanel : UIBase
             myB.text = string.Format(LanguageManager.Instance.GetText("TxPanel_myB"), LanguageManager.Instance.GetText_Encrypt("Bl"));
 
             string ex1SF = LanguageManager.Instance.GetText("TxPanel_ex1");
-            string Pm = LanguageManager.Instance.GetText_Encrypt("Pm");
+            //string Pm = LanguageManager.Instance.GetText_Encrypt("Pm");
             string wh = LanguageManager.Instance.GetText_Encrypt("wh");
-            ex1.text = string.Format(ex1SF, Pm, wh, $"{unit}{limitGold.ToString("F2")}");
+            ex1.text = string.Format(ex1SF, "", wh, $"{unit}{limitGold.ToString("F2")}");
             ex3.text = LanguageManager.Instance.GetText("TxPanel_ex3");
         }
 

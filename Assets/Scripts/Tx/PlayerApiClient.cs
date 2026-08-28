@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -23,7 +24,10 @@ public class PlayerApiClient : MonoBehaviour
     }
     private void Start()
     {
-        Register(null, null);
+        DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+        {
+            Register(null, null);
+        });
     }
     /// <summary>
     /// 注册或更新当前设备对应的玩家信息。

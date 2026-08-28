@@ -109,6 +109,20 @@ public class SnakeGameView : MonoBehaviour
             CreateSnakeVisual(model.snakes[i], clickAction);
         }
         obstaclesRoot.SetAsLastSibling();
+
+        if(GameManager.Instance.playerInfo.level == 1)
+        {
+            boardRoot.transform.localScale = Vector3.one * 0.7f;
+        }
+        else if(GameManager.Instance.playerInfo.level == 2)
+        {
+            boardRoot.transform.localScale = Vector3.one * 0.8f;
+        }
+        else
+        {
+            boardRoot.transform.localScale = Vector3.one;
+        }
+
     }
 
     /// <summary>播放指定蛇的前进动画。</summary>

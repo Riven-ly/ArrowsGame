@@ -544,6 +544,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9008132649715165578}
   - component: {fileID: 1592102707429866317}
+  - component: {fileID: 7251328368413453747}
   m_Layer: 5
   m_Name: shouzhi
   m_TagString: Untagged
@@ -594,3 +595,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 520
   m_TargetDisplay: 0
+--- !u!111 &7251328368413453747
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6053077408410223820}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: b0468c1d0c249024085167e631a858d9, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: b0468c1d0c249024085167e631a858d9, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0

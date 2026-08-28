@@ -41,7 +41,7 @@ public class SurpriseRewardTimer : MonoBehaviour
             return;
         }
        
-        UIManager.Instance.OpenUI<SurpriseRewardPanel>(null, () =>
+        UIManager.Instance.OpenUI<SurpriseRewardPanel>(true, () =>
         {
             elapsedTime = 0f;
             rewardPending = false;

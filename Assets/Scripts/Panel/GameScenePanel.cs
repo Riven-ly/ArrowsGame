@@ -24,6 +24,7 @@ public class GameScenePanel : UIBase
     private int currentLives;
     /// <summary>面板上的三个生命图片。</summary>
     [SerializeField] private Image[] lifeImages;
+    public Animation lifeAnim;
     /// <summary>是否已经结束当前关卡。</summary>
     private bool isGameOver;
     /// <summary>游戏总时长，单位为秒。</summary>
@@ -164,6 +165,8 @@ public class GameScenePanel : UIBase
         {
             PlayGuid();
         });
+
+        SurpriseRewardPanel.noThanksCount = 0;//关卡重置
     }
 
     public void PlayGuid()
@@ -212,7 +215,11 @@ public class GameScenePanel : UIBase
     /// </summary>
     public void ResetGame()
     {
-        Refresh();
+        UIManager.Instance.OpenUI<GuoChangPanel>(null, () =>
+        {
+            Refresh();
+            lifeAnim.Play("LifeAnim");
+        });
     }
 
     /// <summary>处理蛇成功完成一次移动。</summary>
