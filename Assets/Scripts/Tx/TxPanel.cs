@@ -152,6 +152,12 @@ public class TxPanel : UIBase
         }
 
         SyncOrderStatus();
+
+        string str = PlayerPrefs.GetString("Guide4Panel");
+        if (string.IsNullOrEmpty(str))
+        {
+            UIManager.Instance.OpenUI<Guide4Panel>();
+        }
     }
 
     public override void Hide()

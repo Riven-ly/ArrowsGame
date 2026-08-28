@@ -40,7 +40,7 @@ public class Guide2Panel : UIBase
         PlayerPrefs.SetString("Guide2Panel", "yes");
         AddCallback(() =>
         {
-            UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas, () =>
+            UIManager.Instance.OpenUI<GeneralRewardPanel2>(itemDatas, () =>
             {
                 UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
             });

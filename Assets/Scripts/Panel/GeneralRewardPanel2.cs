@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralRewardPanel : UIBase
+public class GeneralRewardPanel2 : UIBase
 {
     public Transform itemRoot;
 
@@ -26,7 +26,6 @@ public class GeneralRewardPanel : UIBase
         base.Refresh(data);
 
         itemDatas = data as List<ItemData>;
-        itemDatas[0].count = AdManager.Instance.GetJustNowAdRevenueToGold();
         itemBase = GameManager.Instance.CreatItems(itemDatas, itemRoot);
 
         CollectClick();

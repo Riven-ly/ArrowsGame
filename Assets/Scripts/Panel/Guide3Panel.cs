@@ -11,12 +11,13 @@ public class Guide3Panel : UIBase
     {
         base.Refresh(data);
 
-        GameObject obj = UIManager.Instance.GetUI<PlayerInfoUI>().txTrans.gameObject;
-        TxBtn txBtn = obj.transform.GetChild(0).GetComponent<TxBtn>();
-        if(txBtn == null)
+        if(GameManager.appATTtype == 0)
         {
             Hide();
         }
+
+        GameObject obj = UIManager.Instance.GetUI<PlayerInfoUI>().txTrans.gameObject;
+        TxBtn txBtn = obj.transform.GetChild(0).GetComponent<TxBtn>();
 
         Vector3 targetV = txBtn.btn.transform.position;
         shouzhi.transform.position = targetV;

@@ -52,7 +52,7 @@ public class OtherRewardTaskView : MonoBehaviour
         rewardText.text = count + "/50";
         string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
         string wd = LanguageManager.Instance.GetText_Encrypt("wd");
-        rewardTextLabel.text = string.Format(LanguageManager.Instance.GetText("otherrewardEx2"),50, wd, $"{unit}{1000}");
+        rewardTextLabel.text = string.Format(LanguageManager.Instance.GetText("otherrewardEx2"),50, wd, $"{unit}{510}");
         float targetValue = count / 50f;
         rewardSlider.value = targetValue;
         if (count >= 50)
@@ -98,9 +98,9 @@ public class OtherRewardTaskView : MonoBehaviour
     {
         List<ItemData> itemDatas = new List<ItemData>
         {
-            new ItemData(ItemType.GoldDui, 100000)
+            new ItemData(ItemType.GoldDui, 51000)
         };
-        UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas, () =>
+        UIManager.Instance.OpenUI<GeneralRewardPanel2>(itemDatas, () =>
         {
             OtherRewardTask.Instance.ResetRewardAdsCount();
             RefreshRewardTask();

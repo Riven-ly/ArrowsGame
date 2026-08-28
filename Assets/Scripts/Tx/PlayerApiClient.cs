@@ -23,7 +23,7 @@ public class PlayerApiClient : MonoBehaviour
     }
     private void Start()
     {
-       // Register(null, null);
+        Register(null, null);
     }
     /// <summary>
     /// 注册或更新当前设备对应的玩家信息。

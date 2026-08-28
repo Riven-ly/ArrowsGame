@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DailyMissionPanel : UIBase
 {
     private const int RequiredVideoCount = 12;
-    private const int GoldReward = 10000;
+    private const int GoldReward = 15300;
     private const string DateKey = "DailyMissionDate";
     private const string VideoCountKey = "DailyMissionVideoCount";
     private const string ClaimedKey = "DailyMissionClaimed";
@@ -148,7 +148,7 @@ public class DailyMissionPanel : UIBase
         {
             new ItemData(ItemType.GoldDui, GoldReward)
         };
-        UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas);
+        UIManager.Instance.OpenUI<GeneralRewardPanel2>(itemDatas);
         RefreshView();
     }
 }

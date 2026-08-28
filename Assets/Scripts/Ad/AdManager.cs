@@ -13,7 +13,8 @@ public class AdManager : MonoBehaviour
     //public ApplovinMaxInterstitialOperator applovinMaxInterstitialOperator;
     //private string SDK_key = "PbbJng_h8aD16wZWrSaHN5gtVDExorX-b1ywfx8Gal1WlU7kvbWVDpzsPARTTLwex_cbeU8SGZanUXSoA1WDMx";//²âÊÔ
     private string SDK_key = "HK/ty6sEuJZxApkGSJLXJVce+fSh1+/94j9P7LzNTYgtV0ukP77sxULxX42BJ1uYMzy3E8fzhS4/+JFwbui3IaHkoZGo6I8k6/Al0ZHXXSIAzcowAgrQV+5MBAqe4wEf2FXpDxMR64Y=";
-
+    //------
+    private float AdRevenue;
     private void Awake()
     {
         Instance = this;
@@ -44,6 +45,7 @@ public class AdManager : MonoBehaviour
     {
         DOTween.Sequence().AppendInterval(0.5F).AppendCallback(() =>
         {
+            SetAdRevenue(0.1f);
             EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
             _rewardCallback?.Invoke();
 
@@ -73,5 +75,21 @@ public class AdManager : MonoBehaviour
         //applovinMaxInterstitialOperator.OnClickInterstitialAd(isClick);
     }
 
+    public void SetAdRevenue(float _AdRevenue)
+    {
+        AdRevenue = _AdRevenue;
+    }
 
+    public int GetJustNowAdRevenueToGold()
+    {
+        float ecpm = AdRevenue * 1000f;
+        float unitGold = 0.05f;
+        float targetGold = ecpm * unitGold * PlayerInfo.CurrencyUnitScale;
+        int gameGold = Mathf.RoundToInt(targetGold);
+        if (gameGold < 1)
+        {
+            gameGold = 1;
+        }
+        return gameGold;
+    }
 }

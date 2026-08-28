@@ -10,22 +10,17 @@ public class Guide4Panel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
-
-        GameObject obj = UIManager.Instance.GetUI<GameScenePanel>().snakeGameController.GetSnakeGameObject(2);
-        if(obj == null)
+        if (GameManager.appATTtype == 0)
         {
             Hide();
         }
 
-        Vector3 targetV = Vector3.zero;
+        Vector3 targetV = UIManager.Instance.GetUI<TxPanel>().collectBtn.transform.position;
         shouzhi.transform.position = targetV;
-        btn.transform.position = targetV;
 
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() =>
         {
-            SnakeHeadView head = obj.GetComponentInChildren<SnakeHeadView>();
-            head.GetComponent<Button>().onClick.Invoke();
             PlayerPrefs.SetString("Guide4Panel", "yes");
             Hide();
         });

@@ -159,9 +159,17 @@ public class GameScenePanel : UIBase
         gameBubbleController.StartBubbleLoop();
 
         dailyMissionBtn.gameObject.SetActive(GameManager.Instance.playerInfo.level >= 2);
-          
+
+        DOTween.Sequence().AppendInterval(0.1f).AppendCallback(() =>
+        {
+            PlayGuid();
+        });
+    }
+
+    public void PlayGuid()
+    {
         string str = PlayerPrefs.GetString("Guide1Panel");
-        if(string.IsNullOrEmpty(str))
+        if (string.IsNullOrEmpty(str))
         {
             UIManager.Instance.OpenUI<Guide1Panel>();
         }

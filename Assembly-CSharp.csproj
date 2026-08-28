@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Panel\GameLoadingPanel.cs" />
     <Compile Include="Assets\Scripts\language\IndonesianLanguageConfig.cs" />
     <Compile Include="Assets\Scripts\Panel\DailyMissionPanel.cs" />
+    <Compile Include="Assets\Scripts\Panel\GeneralRewardPanel2.cs" />
     <Compile Include="Assets\Scripts\EventSystem\EventManager.cs" />
     <Compile Include="Assets\Scripts\Ad\RewardAdButton.cs" />
     <Compile Include="Assets\Scripts\Manager\PlayerInfo.cs" />
