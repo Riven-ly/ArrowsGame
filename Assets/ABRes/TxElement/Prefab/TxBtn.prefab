@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn: {fileID: 1007239973894451298}
+  canvasGroup: {fileID: 4999852689996457824}
   text: {fileID: 7273283190558875367}
 --- !u!1 &8634037622647833027
 GameObject:
@@ -185,6 +186,7 @@ GameObject:
   - component: {fileID: 7273283190558875367}
   - component: {fileID: 971012132329850039}
   - component: {fileID: 2722033226508803337}
+  - component: {fileID: 4999852689996457824}
   m_Layer: 5
   m_Name: Text (Legacy)
   m_TagString: Untagged
@@ -283,3 +285,15 @@ MonoBehaviour:
   m_EffectColor: {r: 0.14901961, g: 0.31764707, b: 0.07450981, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!225 &4999852689996457824
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634037622647833027}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

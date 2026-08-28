@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,61 +6,90 @@ using UnityEngine.UI;
 
 public class EvaluationGamePanel : UIBase
 {
-    public Transform bg1;
-    public Transform bg2;
+    public Button btn;
+    public Button hidebtn;
 
     public Button btn1;
     public Button btn2;
     public Button btn3;
     public Button btn4;
+    public Button btn5;
 
+    public CanvasGroup c1;
+    public CanvasGroup c2;
+    public CanvasGroup c3;
+    public CanvasGroup c4;
+    public CanvasGroup c5;
+
+
+    private int target;
     // Start is called before the first frame update
     void Start()
     {
-        btn1.onClick.AddListener(() =>
+        hidebtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
             Hide();
+        });
+        btn.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            PlayerPrefs.SetInt("EvaluationGameStar", target);
+            PingJiaTiaoZhuan();
+            Hide();
+        });
 
+        btn1.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetBtn(1);
         });
         btn2.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            bg1.gameObject.SetActive(false);
-            bg2.gameObject.SetActive(true);
-   
+            SetBtn(2);
         });
         btn3.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            Hide();
-          
+            SetBtn(3);
         });
         btn4.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            PlayerPrefs.SetInt("EvaluationGameStar", 5);
-            callback = () =>
-            {
-                PingJiaTiaoZhuan();
-            };
-            Hide();
+            SetBtn(4);
         });
+        btn5.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetBtn(5);
+        });
+    }
+
+    public void SetBtn(int index)
+    {
+        c1.alpha = index >= 1 ? 1f : 0f;
+        c2.alpha = index >= 2 ? 1f : 0f;
+        c3.alpha = index >= 3 ? 1f : 0f;
+        c4.alpha = index >= 4 ? 1f : 0f;
+        c5.alpha = index >= 5 ? 1f : 0f;
+        target = index;
     }
 
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
-        bg1.gameObject.SetActive(true);
-        bg2.gameObject.SetActive(false);
-
-        //GameScenePanel.isPause = true;
+        GameManager.IsGamePause = true;
+        SetBtn(4);
     }
     public override void Hide()
     {
-        //GameScenePanel.isPause = false;
+        AddCallback(() =>
+        {
+            GameManager.IsGamePause = false;
+            PlayerPrefs.SetString("EvaluationGame", "yes");
+        });
         base.Hide();
-        PlayerPrefs.SetString("EvaluationGame", "yes");
     }
 
     private void PingJiaTiaoZhuan()

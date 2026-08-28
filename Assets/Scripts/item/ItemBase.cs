@@ -50,8 +50,8 @@ public class ItemBase : MonoBehaviour
         }
         else
         {
-            string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
-            cntText.text = "" + MathF.Round(count / (float)PlayerInfo.CurrencyUnitScale, 2);
+            string unit = "";// LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
+            cntText.text = unit + MathF.Round(count / (float)PlayerInfo.CurrencyUnitScale, 2);
         }
 
         if (itemType == ItemType.Gold)

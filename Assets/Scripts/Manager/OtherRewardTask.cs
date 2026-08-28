@@ -6,8 +6,8 @@ public class OtherRewardTask : MonoBehaviour, IEventListener
     public static OtherRewardTask Instance;
 
     private const string SaveKey = "OtherRewardTaskInfo";
-    private const int BonusTaskMaxCount = 50;
-    private const int RewardTaskMaxCount = 50;
+    public const int BonusTaskMaxCount = 50;
+    public const int RewardTaskMaxCount = 50;
     [SerializeField] private OtherRewardTaskInfo taskInfo;
     public System.Action changedEvent;
 

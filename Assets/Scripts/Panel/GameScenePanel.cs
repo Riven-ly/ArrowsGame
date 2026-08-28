@@ -87,6 +87,7 @@ public class GameScenePanel : UIBase
     {
         settingBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             UIManager.Instance.OpenUI<SettingPanel>(null, () =>
             {
                 GameManager.IsGamePause = false;
@@ -94,10 +95,12 @@ public class GameScenePanel : UIBase
         });
         resetBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             ResetGame();
         });
         dailyMissionBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             GameManager.IsGamePause = true;
             UIManager.Instance.OpenUI<DailyMissionPanel>(null, () =>
             {
@@ -131,7 +134,7 @@ public class GameScenePanel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
-        if(gametimeCoroutine != null)
+        if (gametimeCoroutine != null)
         {
             StopCoroutine(gametimeCoroutine);
         }
@@ -156,6 +159,36 @@ public class GameScenePanel : UIBase
         gameBubbleController.StartBubbleLoop();
 
         dailyMissionBtn.gameObject.SetActive(GameManager.Instance.playerInfo.level >= 2);
+          
+        string str = PlayerPrefs.GetString("Guide1Panel");
+        if(string.IsNullOrEmpty(str))
+        {
+            UIManager.Instance.OpenUI<Guide1Panel>();
+        }
+        else if (GameManager.Instance.playerInfo.level == 2)
+        {
+            string str2 = PlayerPrefs.GetString("Guide3Panel");
+            if (string.IsNullOrEmpty(str2))
+            {
+                UIManager.Instance.OpenUI<Guide3Panel>();
+            }
+        }
+        else if (GameManager.Instance.playerInfo.level == 15)
+        {
+            string str5 = PlayerPrefs.GetString("Guide5Panel");
+            if (string.IsNullOrEmpty(str5))
+            {
+                UIManager.Instance.OpenUI<Guide5Panel>();
+            }
+        }
+        else if (GameManager.Instance.playerInfo.level == 31)
+        {
+            string str6 = PlayerPrefs.GetString("Guide6Panel");
+            if (string.IsNullOrEmpty(str6))
+            {
+                UIManager.Instance.OpenUI<Guide6Panel>();
+            }
+        }
     }
 
     /// <summary>
@@ -225,6 +258,7 @@ public class GameScenePanel : UIBase
         {
             Handheld.Vibrate();
         }
+        AudioManager.Instance.PlaySceneSingleMusic2("ClickWrong");
         DOTween.Kill(snakeError);
         snakeError.gameObject.SetActive(true);
         snakeError.color = new Color(snakeError.color.r, snakeError.color.g, snakeError.color.b, 0f);
@@ -254,10 +288,7 @@ public class GameScenePanel : UIBase
         }
         isGameOver = true;
         Debug.Log("蛇玩法通关：全部蛇已经离场。");
-        UIManager.Instance.OpenUI<GameWinPanel>(null, () =>
-        {
-            ResetGame();
-        });
+        UIManager.Instance.OpenUI<GameWinPanel>();
     }
 
     /// <summary>按失败原因满值复活当前关卡。</summary>

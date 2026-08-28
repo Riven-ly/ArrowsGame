@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class TxBtn : MonoBehaviour, IEventListener
 {
     public Button btn;
+    public CanvasGroup canvasGroup;
     public Text text;
 
+    private string unit;
     private void OnEnable()
     {
         EventManager.Instance.RegisterListener(GameEvent.GetGold, this);
@@ -27,32 +29,51 @@ public class TxBtn : MonoBehaviour, IEventListener
     {
         btn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
+            UIManager.Instance.OpenUIMask();
+            btn.interactable = false;
+            canvasGroup.alpha = 0.5f;
 
+            if (!PlayerApiClient.Instance.IsRegistered)
+            {
+                PlayerApiClient.Instance.Register(data => RequestOrderList(), error => RestoreButton());
+                return;
+            }
+
+            RequestOrderList();
         });
 
         RefreshUI();
     }
 
+    private void RequestOrderList()
+    {
+        PlayerApiClient.Instance.GetWDLList(1, 50, data =>
+        {
+            RestoreButton();
+            UIManager.Instance.OpenUI<TxPanel>(data);
+        }, error =>
+        {
+            RestoreButton();
+            Debug.LogError($"TxBtn request WDL list failed: {error}");
+        });
+    }
+
+    private void RestoreButton()
+    {
+        btn.interactable = true;
+        canvasGroup.alpha = 1f;
+        UIManager.Instance.HideUIMask();
+    }
+
     private void RefreshUI()
     {
-        float totalNote = 10000f;
-        float totalUsd = 2.5f;
-        float currentNote = GameManager.Instance.playerInfo.Gold;
-
-        float usdResult = currentNote * (totalUsd / totalNote);
-
-        float rounded = MathF.Round(usdResult, 3);
-        //Debug.Log($"原始值:{usdResult}");
-        //Debug.Log($"保留两位小数:{rounded}");
-        if(rounded < 0.001f)
+        if(string.IsNullOrEmpty(unit))
         {
-            rounded = 0.001f;
+            unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
         }
-        if(GameManager.Instance.playerInfo.Gold == 0f)
-        {
-            rounded = 0f;
-        }
-
-        text.text = $"≈{LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit")}{rounded}";
+        float v = TxManager.Instance.GetRealityGold(GameManager.Instance.playerInfo.level);
+        text.text = $"鈮坽unit}{v}";
     }
+
 }

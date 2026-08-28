@@ -33,6 +33,11 @@ public class GeneralRewardPanel : UIBase
 
     private void CollectClick()
     {
+        DOTween.Sequence().AppendInterval(0.8f).AppendCallback(() =>
+        {
+            AudioManager.Instance.PlaySceneSingleMusic("GetItem");
+        });
+
         PlayerInfoUI playerInfoUI = UIManager.Instance.GetUI<PlayerInfoUI>();
         UIManager.Instance.OpenUIMask();
         float awaitTime = 0.1f;
@@ -63,7 +68,10 @@ public class GeneralRewardPanel : UIBase
 
     public override void Hide()
     {
-        GameManager.Instance.SavePlayerInfo();
+        AddCallback(() =>
+        {
+            GameManager.Instance.SavePlayerInfo();
+        });
         base.Hide();
     }
 

@@ -44,7 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81f2b06ee9ab76143bc53de1005e054b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TxManagerPrefab: {fileID: 1356340099354012108, guid: 15a5778c995b3b8449391f8209c8455d, type: 3}
   TxElementBtnPrefab: {fileID: 4273696070920054371, guid: 0cabc6f6f31f9ad43b3e9605d554ea80, type: 3}
   diamondsSprite: {fileID: 21300000, guid: dc5089f39a42ded448766a777777179d, type: 3}
   diamondRerardIconsSprite: {fileID: 21300000, guid: 6e64a67b20714b74088c63142f5d0879, type: 3}
-  uiPanel: []
+  uiPanel:
+  - {fileID: 5589897442854256909, guid: 3a82c498d62f45f4f87e43e27fa14e93, type: 3}
+  - {fileID: 5589897442854256909, guid: ee30c92f7a9205e43b165326c99bf506, type: 3}
+  - {fileID: 5589897442854256909, guid: 0265f0c73b1ccb54bb782bbbcf281415, type: 3}
+  - {fileID: 5589897442854256909, guid: 9198645c78c30bc4b8339f23858b474c, type: 3}
+  - {fileID: 5589897442854256909, guid: 0e892c961e88c794796cfaaa5b44b446, type: 3}
+  - {fileID: 5589897442854256909, guid: ad5da5694969722448a00870278aa49d, type: 3}

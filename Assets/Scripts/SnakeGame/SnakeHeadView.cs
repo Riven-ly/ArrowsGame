@@ -10,10 +10,23 @@ public class SnakeHeadView : MonoBehaviour
 {
     public CanvasGroup hintCanvasGroup;
     public Transform hintItemEffect;
+    public Animation anim;
     /// <summary>蛇头子节点图片。</summary>
     [SerializeField] private Image headImage;
     /// <summary>蛇头点击按钮。</summary>
     [SerializeField] private Button clickButton;
+
+    private float timer;
+    private float animTime = 2f;
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if(timer > animTime)
+        {
+            timer = 0f;
+            anim.Play("snakeHeadAnim");
+        }
+    }
 
     /// <summary>初始化蛇头图片、方向和点击回调。</summary>
     public void Initialize(Sprite sprite, SnakeGameModel.MoveDirection direction, Action clickAction)
@@ -25,6 +38,9 @@ public class SnakeHeadView : MonoBehaviour
         clickButton.onClick.RemoveAllListeners();
         clickButton.onClick.AddListener(() => clickAction());
         gameObject.SetActive(true);
+
+        animTime = UnityEngine.Random.Range(2f, 6f);
+        timer = 0f;
     }
 
     /// <summary>显示预制体中已经配置好方向的提示线。</summary>

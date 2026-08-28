@@ -84,6 +84,13 @@ public class PlayerInfo
         gold = Mathf.Max(gold, 0);
     }
 
+    public int FrozenGold()
+    {
+        int frozenGold = gold;
+        gold = 0;
+        return frozenGold;
+    }
+
     //========================= ×êÊ¯ =========================
     public void Add_diamond(int _cnt)
     {

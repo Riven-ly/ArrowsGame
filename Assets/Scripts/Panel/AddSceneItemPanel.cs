@@ -17,6 +17,7 @@ public class AddSceneItemPanel : UIBase
     {
         hideBtn.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             Hide();
         });
     }
@@ -58,6 +59,7 @@ public class AddSceneItemPanel : UIBase
                     GameManager.Instance.playerInfo.Add_item_autoClick(1);
                     break;
             }
+            AudioManager.Instance.PlaySceneSingleMusic("GetItem");
             gameSceneitemBase.Refresh();
             GameManager.Instance.SavePlayerInfo();
         });

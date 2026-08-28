@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,7 +45,7 @@ public class GameWinPanel : UIBase
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
-
+        AudioManager.Instance.PlaySceneSingleMusic("LevelComplete");
         lvText.text = $"{LanguageManager.Instance.GetText("Level")} {GameManager.Instance.playerInfo.level}";
         if (itemDatas == null)
         {
@@ -54,6 +55,7 @@ public class GameWinPanel : UIBase
 
         GameManager.IsGamePause = true;
         itemBase = GameManager.Instance.CreatItems(itemDatas, itemRoot);
+        itemBase[0].cntText.gameObject.SetActive(false);
         bool _isContainGold = false;
         foreach (var itemdata in itemDatas)
         {
@@ -75,7 +77,7 @@ public class GameWinPanel : UIBase
         {
             UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas, () =>
             {
-                GameManager.IsGamePause = false;
+                PlayGuide();
             });
         });
         Hide();
@@ -85,15 +87,33 @@ public class GameWinPanel : UIBase
     {
         AddCallback(() =>
         {
-            GameManager.IsGamePause = false;
+            PlayGuide();
         });
         Hide();
     }
 
+    private void PlayGuide()
+    {
+        GameManager.IsGamePause = false;
+        string str = PlayerPrefs.GetString("Guide2Panel");
+        if (string.IsNullOrEmpty(str))
+        {
+            UIManager.Instance.OpenUI<Guide2Panel>();
+        }
+        else
+        {
+            UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
+        }
+    }
+
     public override void Hide()
     {
-        GameManager.Instance.playerInfo.level++;
-        GameManager.Instance.SavePlayerInfo();
+        AddCallback(() =>
+        {
+            GameManager.Instance.playerInfo.level++;
+            GameManager.Instance.SavePlayerInfo();
+        });
+ 
         base.Hide();
     }
 

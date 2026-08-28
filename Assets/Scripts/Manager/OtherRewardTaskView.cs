@@ -29,7 +29,7 @@ public class OtherRewardTaskView : MonoBehaviour
 
     private void RefreshBonusTask()
     {
-        int count = OtherRewardTask.Instance.BonusAdsCount;
+        int count = Mathf.Min(OtherRewardTask.Instance.BonusAdsCount, OtherRewardTask.BonusTaskMaxCount);
         int nextPercent = GetNextBonusPercent(count);
         int stageMaxCount = GetBonusStageMaxCount(count);
         bonusText.text = count + "/" + stageMaxCount;

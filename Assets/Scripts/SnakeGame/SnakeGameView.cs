@@ -801,4 +801,55 @@ public class SnakeGameView : MonoBehaviour
         result.transform.SetParent(parent, false);
         return result;
     }
+
+    public GameObject GetWayBlockerGameObject(int index)
+    {
+        int currentIndex = 0;
+        for (int i = 0; i < obstaclesRoot.childCount; i++)
+        {
+            SnakeWayBlockerView blocker = obstaclesRoot.GetChild(i).GetComponent<SnakeWayBlockerView>();
+            if (blocker == null || !blocker.gameObject.activeSelf)
+            {
+                continue;
+            }
+
+            if (currentIndex == index)
+            {
+                return blocker.gameObject;
+            }
+
+            currentIndex++;
+        }
+
+        return null;
+    }
+
+    public GameObject GetBlackHoleGameObject(int index)
+    {
+        int currentIndex = 0;
+        for (int i = 0; i < obstaclesRoot.childCount; i++)
+        {
+            SnakeBlackHoleView hole = obstaclesRoot.GetChild(i).GetComponent<SnakeBlackHoleView>();
+            if (hole == null || !hole.gameObject.activeSelf)
+            {
+                continue;
+            }
+
+            if (currentIndex == index)
+            {
+                return hole.gameObject;
+            }
+
+            currentIndex++;
+        }
+
+        return null;
+    }
+
+    public GameObject GetSnakeGameObject(int snakeId)
+    {
+        return visuals.TryGetValue(snakeId, out SnakeVisual visual)
+            ? visual.root.gameObject
+            : null;
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -10,13 +10,31 @@ public static class PortugueseLanguageConfig
     {
       
         {"Special_Diamond_unit", "JA=="},
-        {"CHT", "U2FjYXI="},
-        {"CH", "c2FjYXI="},
-        {"WD", "UmV0aXJhcg=="},
-        {"wd", "cmV0aXJhcg=="},
-        {"Wh", "UmV0aXJhZGE="},
-        {"wh", "cmV0aXJhZGE="},
-        {"pp", "cGF5cGFs"},
+        {"cht", "Sacar"},//cash out
+        {"Ch", "Dinheiro"},//Cash 
+        {"CH", "DINHEIRO"},//CASH
+        {"WD", "RETIRAR"}, //WITHDRAW
+        {"wd", "retirar"}, //withdraw
+        {"Wh", "Saque"},//Withdrawal 
+        {"wh", "saque"},//withdrawal
+        {"Bl", "Saldo"},//Balance
+        {"WDLStatus_REVIEWING", "Em análise"},
+        {"WDLStatus_PAYING", "Pagamento em andamento"},
+        {"WDLStatus_SUCCESS", "Concluído"},
+        {"WDLStatus_REJECTED", "Rejeitado"},
+        {"WDLStatus_FAILED", "Falhou"},
+        {"Month_1", "Janeiro"},
+        {"Month_2", "Fevereiro"},
+        {"Month_3", "Março"},
+        {"Month_4", "Abril"},
+        {"Month_5", "Maio"},
+        {"Month_6", "Junho"},
+        {"Month_7", "Julho"},
+        {"Month_8", "Agosto"},
+        {"Month_9", "Setembro"},
+        {"Month_10", "Outubro"},
+        {"Month_11", "Novembro"},
+        {"Month_12", "Dezembro"},
         
     };
 }

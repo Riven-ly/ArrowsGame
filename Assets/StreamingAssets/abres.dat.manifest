@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3182113299
+CRC: 76034250
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fcfb4e7dc6b7a3105d06cb8d2631d2e1
+    Hash: dd9159fafafbdccd521de31ddb7f8126
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e46195fd116b24e472863ae79c1ab955
+    Hash: 7a45916d736a44768c989a6ba79fb919
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: fcfb4e7dc6b7a3105d06cb8d2631d2e1
+    Hash: dd9159fafafbdccd521de31ddb7f8126
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,20 +22,62 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: b59c3c8842f63824b8cf717a8d6fab24, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 95ec5976699eabb449d9066b929dbf77, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 19087193093e8e54f93188d295af3976, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4321edb194cceb043b8436eba4d55cab, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 81f2b06ee9ab76143bc53de1005e054b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5cba361ad8774824ba3915c6a703bbd6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8849bc63b2a84d34ab09b72f03553c82, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 98b940b3e7ff4374ba1ee95778aa8b85, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6c71d011e83f7364695de01e302ac52a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: eb419127f9831774aa0aa7a4d3f0444d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ca172b1b9ee7cb843a193c935893b1b0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: fcfe5c7f3d7c29d4eafc4b2e57002033, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 64452b8a9b662c24a9677883083e83f3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 55a941e02be5f8d4fb4683a10610524d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -46,9 +88,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 225
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -58,51 +104,56 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.FontData
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/EndEditEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/OnChangeEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/SubmitEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Navigation
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/ABRes/TxElement/Texture/TypeSelect/paypal.png
-- Assets/ABRes/TxElement/Texture/btn 1.png
-- Assets/ABRes/TxElement/Texture/2.png
-- Assets/ABRes/TxElement/Texture/1.png
-- Assets/ABRes/TxElement/Texture/shop.png
-- Assets/ABRes/TxElement/Texture/dingzi.png
-- Assets/ABRes/ABResManager/chaopiao.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/btn_green.png
+- Assets/ABRes/TxElement/Texture/anniu2.png
+- Assets/ABRes/TxElement/Texture/failed/tanchuang.png
+- Assets/ABRes/TxElement/Texture/failed/Withdrawalfailed.png
+- Assets/ABRes/TxElement/Texture/tips/x.png
+- Assets/ABRes/TxElement/Prefab/TxFailedPanel.prefab
 - Assets/ABRes/TxElement/Texture/paypal.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/2.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/kuang.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/btn_blue.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/inter.png
-- Assets/ABRes/TxElement/Texture/card_1.png
+- Assets/ABRes/ABResManager/chaopiao.png
+- Assets/ABRes/TxElement/Prefab/TxAccountPanel.prefab
+- Assets/ABRes/TxElement/Texture/History/di.png
+- Assets/ABRes/TxElement/Texture/lishijilu.png
+- Assets/ABRes/TxElement/Texture/records-tanchuang.png
+- Assets/ABRes/TxElement/Texture/jine.png
 - Assets/ABRes/ABResManager/ABResManager.prefab
-- Assets/ABRes/TxElement/Texture/x 1.png
-- Assets/ABRes/TxElement/Texture/new/anniu.png
+- Assets/ABRes/TxElement/Texture/tips/hua-1 1.png
+- Assets/ABRes/TxElement/Prefab/TxTipsPanel.prefab
+- Assets/ABRes/TxElement/Texture/anniu.png
+- Assets/ABRes/TxElement/Texture/Account/tanchuang.png
 - Assets/ABRes/TxElement/Texture/duigou.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/paytm.png
-- Assets/ABRes/TxElement/Texture/card_2.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/cash app.png
-- Assets/ABRes/TxElement/Texture/withdraw.png
-- Assets/ABRes/TxElement/Texture/di_2.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/pix.png
-- Assets/ABRes/TxElement/Texture/di.png
-- Assets/ABRes/TxElement/Texture/btn(1).png
-- Assets/ABRes/TxElement/Texture/money.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/paypay.png
-- Assets/ABRes/TxElement/Texture/btn.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/bg.png
-- Assets/ABRes/TxElement/Texture/di(1).png
+- Assets/ABRes/TxElement/Texture/History/paypal.png
+- Assets/ABRes/TxElement/Texture/Account/shurukuang.png
+- Assets/ABRes/TxElement/Texture/shuoming.png
+- Assets/ABRes/TxElement/Texture/tips/faq-tanchuang.png
+- Assets/ABRes/TxElement/Texture/t.png
+- Assets/ABRes/TxElement/Texture/neirong-di.png
+- Assets/ABRes/TxElement/Texture/faq-tanchuang.png
+- Assets/ABRes/TxElement/Texture/bg.png
+- Assets/ABRes/TxElement/Prefab/TxSucceedPanel.prefab
+- Assets/ABRes/TxElement/Texture/fanhui.png
 - Assets/ABRes/ABResManager/chaopiaodui.png
 - Assets/ABRes/TxElement/Prefab/TxBtn.prefab
-- Assets/ABRes/TxElement/Texture/TypeSelect/btn.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/qiwi.png
-- Assets/ABRes/TxElement/Texture/bg(1).png
-- Assets/ABRes/TxElement/Texture/TypeSelect/1.png
-- Assets/ABRes/TxElement/Texture/di_3.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/coinbase.png
-- Assets/ABRes/TxElement/Texture/TypeSelect/btn_green(1).png
-- Assets/ABRes/TxElement/Texture/bg.png
+- Assets/ABRes/TxElement/Prefab/TxManager.prefab
+- Assets/ABRes/TxElement/Texture/Account/paypal.png
+- Assets/ABRes/TxElement/Prefab/TxPanelCell.prefab
+- Assets/ABRes/TxElement/Texture/hua-2.png
+- Assets/ABRes/TxElement/Texture/beishu.png
+- Assets/ABRes/TxElement/Texture/dangwei-di.png
+- Assets/ABRes/TxElement/Prefab/TxHistoryPanel.prefab
+- Assets/ABRes/TxElement/Prefab/TxPanel.prefab
 Dependencies: []

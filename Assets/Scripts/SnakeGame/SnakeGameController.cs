@@ -12,6 +12,10 @@ public class SnakeGameController : MonoBehaviour
     [SerializeField] private SnakeGameView view;
     /// <summary>当前玩法数据模型。</summary>
     private SnakeGameModel model;
+    /// <summary>当前游戏进程中已缓存随机配置的逻辑关卡编号。</summary>
+    private int cachedEndlessPlayerLevel;
+    /// <summary>当前游戏进程中1000关后复用的随机关卡编号。</summary>
+    private int cachedEndlessLevel;
     /// <summary>是否正在处理蛇的移动。</summary>
     private bool isMoving;
     /// <summary>是否允许继续接受玩家输入。</summary>
@@ -168,6 +172,8 @@ public class SnakeGameController : MonoBehaviour
             {
                 Handheld.Vibrate();
             }
+            AudioManager.Instance.PlaySceneSingleMusic("ClickArrow");
+
             yield return view.PlayExit(snake, layouts);
             snake.removed = true;
             view.NotifySnakeRemoved();
@@ -309,7 +315,13 @@ public class SnakeGameController : MonoBehaviour
         int level = GameManager.Instance.playerInfo.level;
         if (level > 1000)
         {
-            level = UnityEngine.Random.Range(501, 1001);
+            if (cachedEndlessPlayerLevel != level)
+            {
+                cachedEndlessPlayerLevel = level;
+                cachedEndlessLevel = UnityEngine.Random.Range(501, 1001);
+            }
+
+            level = cachedEndlessLevel;
         }
         TextAsset levelAsset = Resources.Load<TextAsset>("Level/lv" + level);
         SnakeLevelConfig config = JsonUtility.FromJson<SnakeLevelConfig>(levelAsset.text);
@@ -422,5 +434,30 @@ public class SnakeGameController : MonoBehaviour
         if (x < 0) return SnakeGameModel.MoveDirection.Left;
         if (y > 0) return SnakeGameModel.MoveDirection.Up;
         return SnakeGameModel.MoveDirection.Down;
+    }
+
+    public SnakeGameModel.SnakeData GetSnake(int index)
+    {
+        if (model == null || index < 0 || index >= model.snakes.Count)
+        {
+            return null;
+        }
+
+        return model.snakes[index];
+    }
+
+    public GameObject GetSnakeGameObject(int snakeId)
+    {
+        return view.GetSnakeGameObject(snakeId);
+    }
+
+    public GameObject GetWayBlockerGameObject(int index)
+    {
+        return view.GetWayBlockerGameObject(index);
+    }
+
+    public GameObject GetBlackHoleGameObject(int index)
+    {
+        return view.GetBlackHoleGameObject(index);
     }
 }

@@ -39,7 +39,7 @@ public class GoldFlyControl : MonoBehaviour
                 .SetEase(Ease.OutCubic)//OutCubic
                 .OnComplete(() =>
                 {
-                    AudioManager.Instance.SetAudioSource(source, "gold");
+                    //AudioManager.Instance.SetAudioSource(source, "gold");
                     icon.gameObject.SetActive(false);
                     DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
                     {

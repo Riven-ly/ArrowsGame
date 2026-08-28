@@ -43,7 +43,7 @@ public class GameSceneItem_AutoClick : GameSceneItemBase
 
         if(eachRoundItemUseCnt >= eachRoundItemUseCntMax)
         {
-            string str = $"单局道具最多使用 {eachRoundItemUseCntMax} 次!";
+            string str = string.Format(LanguageManager.Instance.GetText("ItemLimit"), eachRoundItemUseCntMax);
             UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
             return;
         }
@@ -56,6 +56,7 @@ public class GameSceneItem_AutoClick : GameSceneItemBase
         bool isUseItemSucceed = TryUseItem();
         if (isUseItemSucceed)
         {
+            AudioManager.Instance.PlaySceneSingleMusic("UseItem");
             eachRoundItemUseCnt++;
             StartCoroutine(AutoClickSnakes());
             GameManager.Instance.playerInfo.Minus_item_autoClick(1);

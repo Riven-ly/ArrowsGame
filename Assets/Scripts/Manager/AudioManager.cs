@@ -9,13 +9,15 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource BGM;
     public AudioSource SceneSingleMusic;
+    public AudioSource SceneSingleMusic2;
+
     public AudioSource SceneLoopMusic;
     public AudioSource btnMusic;
 
     public List<AudioClip> audioClips;
     private Dictionary<string, AudioClip> sceneMusics;
 
-    private float bgmVolume = 0.5f;
+    private float bgmVolume = 0.7f;
     private bool isMusic = true;
     private bool isSound = true;
     private void Awake()
@@ -29,7 +31,7 @@ public class AudioManager : MonoBehaviour
         {
             sceneMusics.Add(audioClip.name, audioClip);
         }
-        PlayBGM("bgm");
+        PlayBGM("BGM");
     }
 
     public void PlayBGM(string name)
@@ -70,7 +72,15 @@ public class AudioManager : MonoBehaviour
         float volume = isSound ? customV : 0f;
         SceneSingleMusic.volume = volume;
     }
-
+    public void PlaySceneSingleMusic2(string name, float customV = 1f)
+    {
+        AudioClip audioClip = GetAudioClip(name);
+        if (audioClip == null) return;
+        SceneSingleMusic2.clip = audioClip;
+        SceneSingleMusic2.Play();
+        float volume = isSound ? customV : 0f;
+        SceneSingleMusic2.volume = volume;
+    }
 
     private AudioClip GetAudioClip(string name)
     {
@@ -93,6 +103,7 @@ public class AudioManager : MonoBehaviour
         isSound = isOpen;
         float volume = isOpen ? 1f : 0f;
         SceneSingleMusic.volume = volume;
+        SceneSingleMusic2.volume = volume;
         SceneLoopMusic.volume = volume;
         btnMusic.volume = volume;
     }

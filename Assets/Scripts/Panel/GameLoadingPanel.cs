@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ public class GameLoadingPanel : UIBase
     public Slider slider;
     public Text loadingText;
     public Text progressText;
+    public RectTransform barRoot;
+    public RectTransform snake;
+
     public static bool isCheckRegister = true;//登录检测：东8区/中国
     public static bool isOpenStatic = false;
 
@@ -49,6 +53,17 @@ public class GameLoadingPanel : UIBase
             StartCoroutine(CheckNetworkIE());
             LoadingUI();
         }
+
+        slider.onValueChanged.AddListener(OnSliderValueChange);
+        //激活时刷新一次当前位置
+        OnSliderValueChange(slider.value);
+    }
+    void OnSliderValueChange(float progress)
+    {
+        float totalWidth = barRoot.rect.width;
+        float targetLocalX = -totalWidth / 2f + totalWidth * progress;
+        targetLocalX = Mathf.Clamp(targetLocalX, -totalWidth / 2f, totalWidth / 2f);
+        snake.anchoredPosition = new Vector2(targetLocalX, snake.anchoredPosition.y);
     }
 
     private void LoadingUI()

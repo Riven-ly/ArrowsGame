@@ -53,6 +53,7 @@ public class SurpriseRewardPanel : UIBase
 
         GameManager.IsGamePause = true;
         itemBase = GameManager.Instance.CreatItems(itemDatas, itemRoot);
+        itemBase[0].cntText.gameObject.SetActive(false);
         bool _isContainGold = false;
         foreach (var itemdata in itemDatas)
         {

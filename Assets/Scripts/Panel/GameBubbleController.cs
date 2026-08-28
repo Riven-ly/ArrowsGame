@@ -21,6 +21,7 @@ public class GameBubbleController : MonoBehaviour
     {
         gameBubbleButton.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             OnBubbleClicked();
         });
         gameBubble.gameObject.SetActive(false);
@@ -67,7 +68,7 @@ public class GameBubbleController : MonoBehaviour
         gameBubbleCanvasGroup.DOFade(1f, 0.2f);
         gameBubble.gameObject.SetActive(true);
         bubbleTween = DOTween.Sequence()
-            .Append(gameBubble.DOLocalMove(point2.localPosition, 4f).SetEase(Ease.Linear))
+            .Append(gameBubble.DOLocalMove(point2.localPosition, 5f).SetEase(Ease.Linear))
             .Append(gameBubble.DOLocalMove(point3.localPosition, 5f).SetEase(Ease.Linear))
             .Append(gameBubble.DOLocalMove(point4.localPosition, 4f).SetEase(Ease.Linear))
             .Append(gameBubble.DOLocalMove(point1.localPosition, 5f).SetEase(Ease.Linear))

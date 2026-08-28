@@ -26,6 +26,7 @@ public class DailyMissionPanel : UIBase
     {
         closeButton.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlayBtnMusic();
             Hide();
         });
         Subtitle.text = string.Format(LanguageManager.Instance.GetText("SubtitleEx"), LanguageManager.Instance.GetText_Encrypt("cht"));

@@ -22,6 +22,7 @@ public class GameLosePanel : UIBase
         gameScenePanel = data as GameScenePanel;
 
         reviveButton.Init(ReviveGame, "GameLosePanel", false);
+        AudioManager.Instance.PlaySceneSingleMusic("LevelFailed");
     }
 
     private void RestartGame()
@@ -37,6 +38,7 @@ public class GameLosePanel : UIBase
     {
         AddCallback(() =>
         {
+            AudioManager.Instance.PlaySceneSingleMusic("UseItem");
             gameScenePanel.ReviveGame();
         });
         Hide();
