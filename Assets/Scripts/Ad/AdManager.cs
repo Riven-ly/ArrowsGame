@@ -43,16 +43,16 @@ public class AdManager : MonoBehaviour
     /// </summary>
     public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
     {
-        DOTween.Sequence().AppendInterval(0.5F).AppendCallback(() =>
-        {
-            SetAdRevenue(UnityEngine.Random.Range(0.0002f, 0.008f));
-            EventManager.Instance.TriggerEvent(GameEvent.PlayAds, AdRevenue);
-            _rewardCallback?.Invoke();
+        //DOTween.Sequence().AppendInterval(0.5F).AppendCallback(() =>
+        //{
+        //    SetAdRevenue(UnityEngine.Random.Range(0.0002f, 0.008f));
+        //    EventManager.Instance.TriggerEvent(GameEvent.PlayAds, AdRevenue);
+        //    _rewardCallback?.Invoke();
 
-        });
-        // applovinMaxRewardOperator.RewardReceivedCallback = _rewardCallback;
-        // applovinMaxRewardOperator.RewardDisplayErrorCallback = _displayErrorCallback;
-        //applovinMaxRewardOperator.ShowRewardedAd();
+        //});
+        applovinMaxRewardOperator.RewardReceivedCallback = _rewardCallback;
+        applovinMaxRewardOperator.RewardDisplayErrorCallback = _displayErrorCallback;
+        applovinMaxRewardOperator.ShowRewardedAd();
     }
 
     /// <summary>
