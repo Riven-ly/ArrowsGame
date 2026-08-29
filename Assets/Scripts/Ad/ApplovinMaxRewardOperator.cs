@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class ApplovinMaxRewardOperator : MonoBehaviour
 {
-    private string _androidRewardedAdUnitId = "5c6c3571c535ffde";
+    private string _androidRewardedAdUnitId = "bf43191acec834be";
     //private string _androidRewardedAdUnitId = "7853d0583015ae97"; // 安卓测试ID
     private string _iosRewardedAdUnitId = "";     // iOS测试ID
     int retryAttempt;
@@ -175,14 +175,12 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
             playRewardAdCompleteCallback = () =>
             {
                 Debug.Log("OnRewardedAdReceivedRewardEvent   ");
-                EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
                 ExecutionRewardReceivedCallback();
             };
         }
         else  //获得奖励时已经调用过Close了
         {
             Debug.Log("OnRewardedAdReceivedRewardEvent  ");
-            EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
             ExecutionRewardReceivedCallback();
         }
 
@@ -196,6 +194,9 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     //广告成功展示且产生有效收益
     private void OnRewardedAdRevenuePaidEvent(MaxSdk.AdInfo adInfo)
     {
+        AdManager.Instance.SetAdRevenue((float)adInfo.Revenue);
+        EventManager.Instance.TriggerEvent(GameEvent.PlayAds, adInfo.Revenue);
+
         // Ad revenue paid. Use this callback to track user revenue.
         if (!OtherSdkManager.IsInit)
         {

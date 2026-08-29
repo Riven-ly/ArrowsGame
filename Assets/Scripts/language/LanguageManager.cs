@@ -25,7 +25,6 @@ public class LanguageManager : MonoBehaviour
 
         SystemLanguage currentLang = Application.systemLanguage;
 
-        currentLang = SystemLanguage.Portuguese;
         if (currentLang == SystemLanguage.Indonesian)
         {
             Debug.Log("当前系统语言是印尼语");
@@ -48,8 +47,8 @@ public class LanguageManager : MonoBehaviour
             LanguageCode = "en";
         }
 
-        //string encryptStr = Convert.ToBase64String(Encoding.UTF8.GetBytes("key"));
-        //Debug.Log(encryptStr);
+        string encryptStr = Convert.ToBase64String(Encoding.UTF8.GetBytes("Rp"));
+        Debug.Log(encryptStr);
     }
     public string GetText(string key)
     {

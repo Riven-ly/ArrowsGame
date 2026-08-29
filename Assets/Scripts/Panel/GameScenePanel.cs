@@ -167,6 +167,8 @@ public class GameScenePanel : UIBase
         });
 
         SurpriseRewardPanel.noThanksCount = 0;//关卡重置
+
+        OtherSdkManager.Instance.CustomEvent("level_start", "level_id", GameManager.Instance.playerInfo.level);
     }
 
     public void PlayGuid()
@@ -271,7 +273,7 @@ public class GameScenePanel : UIBase
     {
         if (SettingPanel.IsVibrateEnabled)
         {
-            Handheld.Vibrate();
+            VibrationManager.Vibrate();
         }
         AudioManager.Instance.PlaySceneSingleMusic2("ClickWrong");
         DOTween.Kill(snakeError);

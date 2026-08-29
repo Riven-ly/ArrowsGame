@@ -30,6 +30,7 @@ public class Guide3Panel : UIBase
             UIManager.Instance.GetUI<PlayerInfoUI>().GoldCanvasRecover();
             txBtn.btn.onClick.Invoke();
             PlayerPrefs.SetString("Guide3Panel", "yes");
+            OtherSdkManager.Instance.CustomEvent("game_guide3");
             Hide();
         });
         GameManager.IsGamePause = true;

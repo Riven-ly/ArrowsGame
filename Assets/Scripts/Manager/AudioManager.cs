@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
     public List<AudioClip> audioClips;
     private Dictionary<string, AudioClip> sceneMusics;
 
-    private float bgmVolume = 0.7f;
+    private float bgmVolume = 0.5f;
     private bool isMusic = true;
     private bool isSound = true;
     private void Awake()

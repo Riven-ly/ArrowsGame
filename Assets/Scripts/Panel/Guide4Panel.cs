@@ -22,6 +22,7 @@ public class Guide4Panel : UIBase
         btn.onClick.AddListener(() =>
         {
             PlayerPrefs.SetString("Guide4Panel", "yes");
+            OtherSdkManager.Instance.CustomEvent("game_guide4");
             Hide();
         });
      

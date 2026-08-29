@@ -114,6 +114,8 @@ public class TxAccountPanel : UIBase
 
     private void CompleteWDL(string orderNo)
     {
+        OtherSdkManager.Instance.CustomEvent("cashout_level", "completeBtn", selectCell.transform.GetSiblingIndex() + 1);
+
         selectCell.info.type = TxPanelCell.TxPanelCellType.Checking;
         selectCell.info.orderNumber = orderNo;
         selectCell.info.frozenGold = GameManager.Instance.playerInfo.FrozenGold();

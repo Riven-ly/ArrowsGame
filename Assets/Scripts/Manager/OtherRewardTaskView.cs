@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,7 +51,7 @@ public class OtherRewardTaskView : MonoBehaviour
         rewardText.text = count + "/50";
         string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
         string wd = LanguageManager.Instance.GetText_Encrypt("wd");
-        rewardTextLabel.text = string.Format(LanguageManager.Instance.GetText("otherrewardEx2"),50, wd, $"{unit}{510}");
+        rewardTextLabel.text = string.Format(LanguageManager.Instance.GetText("otherrewardEx2"), 50, wd, $"{unit}{AdManager.Instance.ConvertGoldToLocalCurrency(GetGoldReward())}");
         float targetValue = count / 50f;
         rewardSlider.value = targetValue;
         if (count >= 50)
@@ -94,11 +93,22 @@ public class OtherRewardTaskView : MonoBehaviour
         return Mathf.Clamp01(count / (float)GetBonusStageMaxCount(count));
     }
 
+    public float GetGoldReward()
+    {
+        return GetGoldRewardInternal() / (float)PlayerInfo.CurrencyUnitScale;
+    }
+
+    private int GetGoldRewardInternal()
+    {
+        return Mathf.RoundToInt(OtherRewardTask.Instance.AverageRewardedRevenue * 100f *
+            OtherRewardTask.RewardTaskMaxCount * PlayerInfo.CurrencyUnitScale);
+    }
+
     private void ClaimReward()
     {
         List<ItemData> itemDatas = new List<ItemData>
         {
-            new ItemData(ItemType.GoldDui, 51000)
+            new ItemData(ItemType.GoldDui, GetGoldRewardInternal())
         };
         UIManager.Instance.OpenUI<GeneralRewardPanel2>(itemDatas, () =>
         {

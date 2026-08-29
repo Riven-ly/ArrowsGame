@@ -69,12 +69,15 @@ public class GameWinPanel : UIBase
         GameManager.Instance.GeneralBtnAnim(collectBtnTrans);
 
         otherRewardTaskView.Refresh();
+
+        OtherSdkManager.Instance.CustomEvent("level_complete", "level_id", GameManager.Instance.playerInfo.level);
     }
 
     private void AdsCallback()
     {
         AddCallback(() =>
         {
+            OtherSdkManager.Instance.CustomEvent("level_ad", "level_id", GameManager.Instance.playerInfo.level);
             UIManager.Instance.OpenUI<GeneralRewardPanel>(itemDatas, () =>
             {
                 PlayGuide();
@@ -98,7 +101,10 @@ public class GameWinPanel : UIBase
         string str = PlayerPrefs.GetString("Guide2Panel");
         if (string.IsNullOrEmpty(str))
         {
-            UIManager.Instance.OpenUI<Guide2Panel>();
+            PlayerPrefs.SetString("Guide2Panel", "yes");
+            OtherSdkManager.Instance.CustomEvent("game_guide2");
+            //UIManager.Instance.OpenUI<Guide2Panel>();
+            UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
         }
         else
         {

@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Panel\GeneralRewardPanel2.cs" />
     <Compile Include="Assets\Scripts\EventSystem\EventManager.cs" />
     <Compile Include="Assets\Scripts\Ad\RewardAdButton.cs" />
+    <Compile Include="Assets\Scripts\Manager\VibrationManager.cs" />
     <Compile Include="Assets\Scripts\Manager\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\Panel\LobbyScenePanel.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItem_Hint.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Assets\Scripts\Panel\SurpriseRewardPanel.cs" />
     <Compile Include="Assets\Scripts\Manager\OtherRewardTaskInfo.cs" />
     <Compile Include="Assets\Scripts\Tx\TxHistoryPanel.cs" />
+    <Compile Include="Assets\Scripts\SRDebugger_Test.cs" />
     <Compile Include="Assets\Scripts\SnakeGame\SnakeGameModel.cs" />
     <Compile Include="Assets\Scripts\Effect\FlickerStar.cs" />
     <Compile Include="Assets\Scripts\sceneitem\GameSceneItemBase.cs" />
@@ -1485,6 +1487,14 @@
       <HintPath>Library\PackageCache\com.unity.collections@1.2.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SolarEngineUnityTool">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineUnityTool.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SolarEngineMiniGames">
+      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineMiniGames.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
@@ -1499,14 +1509,6 @@
     </Reference>
     <Reference Include="MiniGameRemoteConfig">
       <HintPath>Assets\Plugins\SolarEngine\MiniGame\MiniGameRemoteConfig.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SolarEngineMiniGames">
-      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineMiniGames.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SolarEngineUnityTool">
-      <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineUnityTool.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="solarenginewindows">

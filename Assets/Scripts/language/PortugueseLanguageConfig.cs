@@ -121,7 +121,7 @@ public static class PortugueseLanguageConfig
         {"3004", "Endereço de e‑mail inválido."},
         {"3005", "Já existe uma solicitação em andamento."},
       
-        {"Special_Diamond_unit", "JA=="},
+        {"Special_Diamond_unit", "UiQ="},
         {"cht", "U2FjYXI="},
         {"Ch", "RGluaGVpcm8="},
         {"CH", "RElOSUVJUk8="},

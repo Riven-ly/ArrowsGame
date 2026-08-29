@@ -49,6 +49,7 @@ public class SurpriseRewardPanel : UIBase
         if(data != null)
         {
             isSurprise = (bool)data;
+            OtherSdkManager.Instance.CustomEvent("bonus_page_enter");
         }
 
         if (itemDatas == null)
@@ -80,6 +81,7 @@ public class SurpriseRewardPanel : UIBase
         if(isSurprise)
         {
             noThanksCount = 0;
+            OtherSdkManager.Instance.CustomEvent("bonus_ad_click");
         }
         AddCallback(() =>
         {

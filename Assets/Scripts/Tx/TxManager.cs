@@ -38,11 +38,10 @@ public class TxManager : MonoBehaviour
     public float GetRealityGold(int lv)
     {
         float multiple = GetMultiple(lv);
-        float totalNote = 100f;
-        float totalUsd = 2.5f * multiple;
+
         float currentNote = GameManager.Instance.playerInfo.Gold;
 
-        float usdResult = currentNote * (totalUsd / totalNote);
+        float usdResult = AdManager.Instance.ConvertGoldToLocalCurrency(currentNote) * multiple;
 
         float rounded = MathF.Round(usdResult, 2);
         //Debug.Log($"原始值:{usdResult}");

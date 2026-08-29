@@ -14,9 +14,22 @@ public class OtherRewardTask : MonoBehaviour, IEventListener
     public int BonusAdsCount => taskInfo.bonusAdsCount;
     public int RewardAdsCount => taskInfo.rewardAdsCount;
 
+    public float AverageRewardedRevenue => taskInfo.rewardedRevenueCount > 0
+        ? taskInfo.rewardedRevenueSum / taskInfo.rewardedRevenueCount
+        : 0.005f;
+
     public void ResetRewardAdsCount()
     {
         taskInfo.rewardAdsCount = 0;
+        taskInfo.rewardedRevenueSum = 0f;
+        taskInfo.rewardedRevenueCount = 0;
+        Save();
+    }
+
+    public void RecordRewardedAdRevenue(float revenue)
+    {
+        taskInfo.rewardedRevenueSum += revenue;
+        taskInfo.rewardedRevenueCount++;
         Save();
     }
 
@@ -52,12 +65,14 @@ public class OtherRewardTask : MonoBehaviour, IEventListener
         {
             return;
         }
+
+        float revenue = data is float value ? value : 0.005f;
         if (taskInfo.bonusAdsCount < BonusTaskMaxCount)
         {
             taskInfo.bonusAdsCount++;
         }
         taskInfo.rewardAdsCount++;
-        Save();
+        RecordRewardedAdRevenue(revenue);
     }
 
     private void Load()

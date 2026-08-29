@@ -72,7 +72,7 @@ public class TxBtn : MonoBehaviour, IEventListener
         {
             unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
         }
-        float v = TxManager.Instance.GetRealityGold(GameManager.Instance.playerInfo.level);
+        float v = TxManager.Instance.GetRealityGold(1);
         text.text = $"≈{unit}{v}";
     }
 

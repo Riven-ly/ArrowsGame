@@ -121,7 +121,7 @@ public static class IndonesianLanguageConfig
         {"3004", "Alamat email tidak valid."},
         {"3005", "Ada pesanan yang sedang berjalan."},
 
-        {"Special_Diamond_unit", "JA=="},
+        {"Special_Diamond_unit", "UnA="},
         {"cht", "dGFyaWsgZGFuYQ=="},
         {"Ch", "VWFuZyBUdW5haQ=="},
         {"CH", "VUFORyBURU5BSQ=="},

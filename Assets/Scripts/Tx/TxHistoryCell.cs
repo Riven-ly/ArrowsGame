@@ -20,7 +20,8 @@ public class TxHistoryCell : MonoBehaviour
         DateTime date = DateTimeOffset.FromUnixTimeMilliseconds(order.createdAt).ToLocalTime().DateTime;
         string month = LanguageManager.Instance.GetText($"Month_{date.Month}");
         time.text = $"{month} {date.Day:00}.{date.Year}";
-        gold.text = $"{unit}{order.applyAmount:F2}";
+        float localAmount = AdManager.Instance.ConvertUsdToLocalCurrency((float)order.applyAmount);
+        gold.text = $"{unit}{localAmount:F2}";
 
         string stateText = GetStateText(order.status);
         state.text = $"<color={GetStateColor(order.status)}>{stateText}</color>";

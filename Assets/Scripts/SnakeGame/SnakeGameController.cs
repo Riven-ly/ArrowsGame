@@ -160,9 +160,16 @@ public class SnakeGameController : MonoBehaviour
         isMoving = true;
         if (collided)
         {
-            yield return view.PlayForward(snake, layouts);
-            collisionEvent?.Invoke();
-            yield return view.PlayBackward(snake, layouts);
+            if (layouts.Count == 1)
+            {
+                yield return view.PlayCollisionFeedback(snake, collisionEvent);
+            }
+            else
+            {
+                yield return view.PlayForward(snake, layouts);
+                collisionEvent?.Invoke();
+                yield return view.PlayBackward(snake, layouts);
+            }
             snake.cells.Clear();
             snake.cells.AddRange(snapshot);
         }
@@ -170,7 +177,7 @@ public class SnakeGameController : MonoBehaviour
         {
             if (SettingPanel.IsVibrateEnabled)
             {
-                Handheld.Vibrate();
+                VibrationManager.Vibrate();
             }
             AudioManager.Instance.PlaySceneSingleMusic("ClickArrow");
 
@@ -328,19 +335,32 @@ public class SnakeGameController : MonoBehaviour
         SnakeGameModel result = new SnakeGameModel(config.size.x, config.size.y);
         if (config.wayBlockers == null) config.wayBlockers = new List<SnakeWayBlockerConfig>();
         if (config.blackHoles == null) config.blackHoles = new List<SnakeBlackHoleConfig>();
+        HashSet<Vector2Int> obstaclePositions = new HashSet<Vector2Int>();
         for (int i = 0; i < config.wayBlockers.Count; i++)
         {
+            Vector2Int position = config.wayBlockers[i].position.ToCell();
+            if (!obstaclePositions.Add(position))
+            {
+                continue;
+            }
+
             result.wayBlockers.Add(new SnakeGameModel.WayBlockerData
             {
-                position = config.wayBlockers[i].position.ToCell(),
+                position = position,
                 remainingSnakeCount = Mathf.RoundToInt(config.wayBlockers[i].lockTime)
             });
         }
         for (int i = 0; i < config.blackHoles.Count; i++)
         {
+            Vector2Int position = config.blackHoles[i].position.ToCell();
+            if (!obstaclePositions.Add(position))
+            {
+                continue;
+            }
+
             result.blackHoles.Add(new SnakeGameModel.BlackHoleData
             {
-                position = config.blackHoles[i].position.ToCell()
+                position = position
             });
         }
         for (int i = 0; i < config.arrows.Count; i++)

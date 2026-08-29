@@ -8,17 +8,17 @@ using UnityEngine.UI;
 
 public class ApplovinMaxInterstitialOperator : MonoBehaviour
 {
-    private string _androidInterstitialAdUnitId = "fd2d1be6977aac32";
-    //private string _androidInterstitialAdUnitId = "075d7d1b3dcbd8e1"; // °²×¿²âÊÔID
-    private string _iosInterstitialAdUnitId = "";     // iOS²âÊÔID
+    private string _androidInterstitialAdUnitId = "20bfbad18d24983f";
+    //private string _androidInterstitialAdUnitId = "075d7d1b3dcbd8e1"; // å®‰å“æµ‹è¯•ID
+    private string _iosInterstitialAdUnitId = "";     // iOSæµ‹è¯•ID
     int retryAttempt;
     //-------------------------------
     string InsertAdUnitId = "";
-    public static bool inter_enable = true;// ²åÆÁ¹ã¸æ×Ü¿ª¹Ø
-    public static bool mau_inter = false;// ÊÖ¶¯²åÆÁÊÇ·ñÇ¿ÖÆÕ¹Ê¾£»trueºöÂÔÀäÈ´¼ä¸ô£¬100%Õ¹Ê¾ÊÖ¶¯²åÆÁ
-    public static float startInsertTime = 120f;//µÚÒ»´Î´ò¿ªapp²åÆÁÊ±¼ä
-    public static float insertTime = 60f;//²åÆÁÊ±¼ä
-    public static float ad_mau_inter_time = 45f;//²åÆÁÀäÈ´Ê±¼ä
+    public static bool inter_enable = true;// æ’å±å¹¿å‘Šæ€»å¼€å…³
+    public static bool mau_inter = false;// æ‰‹åŠ¨æ’å±æ˜¯å¦å¼ºåˆ¶å±•ç¤ºï¼›trueå¿½ç•¥å†·å´é—´éš”ï¼Œ100%å±•ç¤ºæ‰‹åŠ¨æ’å±
+    public static float startInsertTime = 120f;//ç¬¬ä¸€æ¬¡æ‰“å¼€appæ’å±æ—¶é—´
+    public static float insertTime = 60f;//æ’å±æ—¶é—´
+    public static float ad_mau_inter_time = 45f;//æ’å±å†·å´æ—¶é—´
     public float insertTimer = 0;
     [SerializeField] private float insertClickCoolingTime_P;
     public float insertClickCoolingTime
@@ -93,7 +93,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     }
 
     /// <summary>
-    /// Õ¹Ê¾²åÆÁ¹ã¸æ
+    /// å±•ç¤ºæ’å±å¹¿å‘Š
     /// </summary>
     private void ShowInterstitialAd()
     {
@@ -102,7 +102,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(admobNetworkName) && admobNetworkName.ToLower().Contains("admob"))
             {
-                // °üº¬admobµÄÂß¼­
+                // åŒ…å«admobçš„é€»è¾‘
                 isPlayInsertAds = true;
                 MaxSdk.ShowInterstitial(InsertAdUnitId);
                 //UIManager.Instance.OpenUI<AdBreakPanel>(null, () =>
@@ -119,10 +119,10 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         else
         {
             isPlayInsertAds = false;
-            Debug.Log("²åÆÁ¹ã¸æÎ´¼ÓÔØÍê³É£¬ÎŞ·¨Õ¹Ê¾");
+            Debug.Log("æ’å±å¹¿å‘ŠæœªåŠ è½½å®Œæˆï¼Œæ— æ³•å±•ç¤º");
             //string str = LanguageManager.Instance.GetText("AdsNotReady");
             //UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
-            // Õ¹Ê¾Ê§°ÜÊ±ÖØĞÂ¼ÓÔØ
+            // å±•ç¤ºå¤±è´¥æ—¶é‡æ–°åŠ è½½
             LoadInterstitial();
         }
     }
@@ -136,12 +136,12 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
 
         insertClickCoolingTime = ad_mau_inter_time;
 
-        //·ÀË¢
+        //é˜²åˆ·
         //if (!PRgameManager.PR_pass)
         //{
         //    return;
         //}
-        //Ã»ÆÀ·ÖÖ®Ç°
+        //æ²¡è¯„åˆ†ä¹‹å‰
         string str = PlayerPrefs.GetString("EvaluationGame", "");
         if (string.IsNullOrEmpty(str))
         {
@@ -157,7 +157,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
             return;
         }
         isAdLoading = true;
-        Debug.Log("¿ªÊ¼¼ÓÔØ²åÆÁ¹ã¸æ");
+        Debug.Log("å¼€å§‹åŠ è½½æ’å±å¹¿å‘Š");
 
         MaxSdk.LoadInterstitial(InsertAdUnitId);
 
@@ -172,7 +172,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         isAdLoading = false;
         retryAttempt = 0;
         admobNetworkName = adInfo.NetworkName;
-        Debug.Log("²åÆÁ¹ã¸æ¼ÓÔØ³É¹¦ ");
+        Debug.Log("æ’å±å¹¿å‘ŠåŠ è½½æˆåŠŸ ");
     }
 
     private void OnInterstitialLoadFailedEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo)
@@ -182,26 +182,26 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         isAdLoading = false;
         retryAttempt++;
         double retryDelay = Math.Pow(2, Math.Min(6, retryAttempt));
-        Debug.Log($"²åÆÁ¹ã¸æ¼ÓÔØÊ§°Ü :" + errorInfo.Message);
+        Debug.Log($"æ’å±å¹¿å‘ŠåŠ è½½å¤±è´¥ :" + errorInfo.Message);
         Invoke("LoadInterstitial", (float)retryDelay);
     }
 
     private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdk.AdInfo adInfo)
     {
-        Debug.Log("²åÆÁ¹ã¸æÕ¹Ê¾³É¹¦");
+        Debug.Log("æ’å±å¹¿å‘Šå±•ç¤ºæˆåŠŸ");
     }
 
     private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo, MaxSdk.AdInfo adInfo)
     {
         // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
-        Debug.LogError($"²åÆÁ¹ã¸æÕ¹Ê¾Ê§°Ü ");
+        Debug.LogError($"æ’å±å¹¿å‘Šå±•ç¤ºå¤±è´¥ ");
         isPlayInsertAds = false;
         LoadInterstitial();
     }
 
     private void OnInterstitialClickedEvent(string adUnitId, MaxSdk.AdInfo adInfo) 
     {
-        Debug.Log("²åÆÁ¹ã¸æ±»µã»÷");
+        Debug.Log("æ’å±å¹¿å‘Šè¢«ç‚¹å‡»");
         if (!OtherSdkManager.IsInit)
         {
             return;
@@ -212,14 +212,13 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         AdClickAttributes.ad_id = adInfo.AdUnitIdentifier;
         AdClickAttributes.ad_type = 3;
         SolarEngine.Analytics.trackAdClick(AdClickAttributes);
-        Debug.Log("ÉÏ±¨¹ã¸æ±»µã»÷");
+        Debug.Log("ä¸ŠæŠ¥å¹¿å‘Šè¢«ç‚¹å‡»");
     }
 
     private void OnInterstitialHiddenEvent(string adUnitId, MaxSdk.AdInfo adInfo)
     {
         // Interstitial ad is hidden. Pre-load the next ad.
-        EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
-        Debug.Log("²åÆÁ¹ã¸æÒÑ¹Ø±Õ");
+        Debug.Log("æ’å±å¹¿å‘Šå·²å…³é—­");
         isPlayInsertAds = false;
         LoadInterstitial();
     }
@@ -229,7 +228,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         OnInterstitialAdRevenuePaidEvent(adInfo);
     }
 
-    //¹ã¸æ³É¹¦Õ¹Ê¾ÇÒ²úÉúÓĞĞ§ÊÕÒæ
+    //å¹¿å‘ŠæˆåŠŸå±•ç¤ºä¸”äº§ç”Ÿæœ‰æ•ˆæ”¶ç›Š
     private void OnInterstitialAdRevenuePaidEvent(MaxSdk.AdInfo adInfo)
     {
         // Ad revenue paid. Use this callback to track user revenue.
@@ -244,14 +243,14 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         adRevenue.AdRevenueUnit = adInfo.AdUnitIdentifier;
         adRevenue.AdRevenuePlacement = adInfo.Placement;
         Adjust.TrackAdRevenue(adRevenue);
-        //----------------ÈÈÁ¦---------------------------
+        //----------------çƒ­åŠ›---------------------------
         ImpressionAttributes impressionAttributes = new ImpressionAttributes();
         impressionAttributes.ad_platform = adInfo.NetworkName;
         impressionAttributes.ad_id = adInfo.AdUnitIdentifier;
         impressionAttributes.ad_type = 3;
         impressionAttributes.ad_ecpm = adInfo.Revenue * 1000;
         impressionAttributes.currency_type = "USD";
-        impressionAttributes.mediation_platform = "max";//ÌîÈëÄúËùÊ¹ÓÃµÄ¾ÛºÏÆ½Ì¨
+        impressionAttributes.mediation_platform = "max";//å¡«å…¥æ‚¨æ‰€ä½¿ç”¨çš„èšåˆå¹³å°
         impressionAttributes.is_rendered = true;
         SolarEngine.Analytics.trackAdImpression(impressionAttributes);
     }

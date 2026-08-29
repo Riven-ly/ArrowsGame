@@ -28,6 +28,7 @@ public class Guide5Panel : UIBase
         btn.onClick.AddListener(() =>
         {
             PlayerPrefs.SetString("Guide5Panel", "yes");
+            OtherSdkManager.Instance.CustomEvent("game_guide5");
             Hide();
         });
         GameManager.IsGamePause = true;

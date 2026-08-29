@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -132,6 +133,54 @@ public class SnakeGameView : MonoBehaviour
         for (int i = 1; i < layouts.Count; i++)
         {
             yield return MoveSnakeTo(visual, snake, layouts[i]);
+        }
+    }
+
+    /// <summary>播放相邻碰撞时按正常蛇身跟随方式进行的半格前进回退反馈。</summary>
+    public IEnumerator PlayCollisionFeedback(SnakeGameModel.SnakeData snake, Action onCollision)
+    {
+        SnakeVisual visual = visuals[snake.id];
+        int nodeCount = visual.root.childCount;
+        RectTransform[] nodes = new RectTransform[nodeCount];
+        Vector2[] startPositions = new Vector2[nodeCount];
+        Vector2[] forwardPositions = new Vector2[nodeCount];
+        for (int i = 0; i < nodeCount; i++)
+        {
+            nodes[i] = visual.root.GetChild(nodeCount - 1 - i) as RectTransform;
+            startPositions[i] = nodes[i].anchoredPosition;
+        }
+
+        Vector2 headTarget = CellToPosition(snake.cells[0] + SnakeGameModel.DirectionOffset(snake.direction));
+        forwardPositions[0] = Vector2.LerpUnclamped(startPositions[0], headTarget, 0.5f);
+        for (int i = 1; i < nodeCount; i++)
+        {
+            forwardPositions[i] = startPositions[i - 1];
+        }
+
+        float duration = StepDuration * 0.5f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            for (int i = 0; i < nodeCount; i++)
+            {
+                nodes[i].anchoredPosition = Vector2.LerpUnclamped(startPositions[i], forwardPositions[i], t);
+            }
+            yield return null;
+        }
+
+        onCollision?.Invoke();
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            for (int i = 0; i < nodeCount; i++)
+            {
+                nodes[i].anchoredPosition = Vector2.LerpUnclamped(forwardPositions[i], startPositions[i], t);
+            }
+            yield return null;
         }
     }
 
@@ -361,7 +410,7 @@ public class SnakeGameView : MonoBehaviour
                 visuals[snakeIds[i]].headView.ShowHint(duration);
             }
         }
-        int targetIndex = Random.Range(0, snakeIds.Count);
+        int targetIndex = UnityEngine.Random.Range(0, snakeIds.Count);
         if (visuals.ContainsKey(snakeIds[targetIndex]))
         {
             RectTransform targetHead = visuals[snakeIds[targetIndex]].headView.transform as RectTransform;

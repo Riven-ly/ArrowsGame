@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+        <androidPackage spec="com.applovin.mediation:chartboost-adapter:9.14.0.0">
+            <repositories>
+                <repository>https://cboost.jfrog.io/artifactory/chartboost-ads/</repository>
+            </repositories>
+        </androidPackage>
+        <androidPackage spec="com.google.android.gms:play-services-base:16.1.0" />
+    </androidPackages>
+    <iosPods>
+        <iosPod name="AppLovinMediationChartboostAdapter" version="9.14.0.0" />
+    </iosPods>
+    <remoteSwiftPackage url="https://github.com/AppLovin/AppLovin-MAX-Swift-Package-Chartboost.git"
+        version="9.14.0.0"
+        upToNextMajor="true">
+        <swiftPackage name="AppLovinMediationChartboostAdapter" replacesPod="AppLovinMediationChartboostAdapter"/>
+    </remoteSwiftPackage>
+</dependencies>

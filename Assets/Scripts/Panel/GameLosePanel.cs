@@ -23,6 +23,7 @@ public class GameLosePanel : UIBase
 
         reviveButton.Init(ReviveGame, "GameLosePanel", false);
         AudioManager.Instance.PlaySceneSingleMusic("LevelFailed");
+        OtherSdkManager.Instance.CustomEvent("level_fail", "level_id", GameManager.Instance.playerInfo.level);
     }
 
     private void RestartGame()
@@ -40,6 +41,7 @@ public class GameLosePanel : UIBase
         {
             AudioManager.Instance.PlaySceneSingleMusic("UseItem");
             gameScenePanel.ReviveGame();
+            OtherSdkManager.Instance.CustomEvent("level_relivead", "level_id", GameManager.Instance.playerInfo.level);
         });
         Hide();
     }

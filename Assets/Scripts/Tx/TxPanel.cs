@@ -104,8 +104,22 @@ public class TxPanel : UIBase
 
         goldText.text = GameManager.Instance.playerInfo.Gold.ToString("F2");
         levelText.text = $"{LanguageManager.Instance.GetText("TxPanel_levelText")}:{GameManager.Instance.playerInfo.level}";
-        gold_DuiHuanText.text = $"100≈{unit}2.50";
-        float realityGoldF = TxManager.Instance.GetRealityGold(GameManager.Instance.playerInfo.level);
+
+        if (LanguageManager.Instance.type == MultilingualType.Portuguese)
+        {
+            gold_DuiHuanText.text = $"100≈{unit}2.60";
+        }
+        else if (LanguageManager.Instance.type == MultilingualType.Indonesian)
+        {
+            gold_DuiHuanText.text = $"100≈{unit}8900";
+        }
+        else
+        {
+            gold_DuiHuanText.text = $"100≈{unit}2.50";
+        }
+
+
+        float realityGoldF = TxManager.Instance.GetRealityGold(1);
         realityGoldText.text = $"≈{unit}{realityGoldF.ToString("F2")}";
         collectBtnText.text = Wd;
 

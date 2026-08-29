@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class DailyMissionPanel : UIBase
 {
-    private const int RequiredVideoCount = 12;
-    private const int GoldReward = 15300;
+    private const int RequiredVideoCount = 30;
     private const string DateKey = "DailyMissionDate";
     private const string VideoCountKey = "DailyMissionVideoCount";
     private const string ClaimedKey = "DailyMissionClaimed";
+    private const string RevenueSumKey = "DailyMissionRevenueSum";
+    private const string RevenueCountKey = "DailyMissionRevenueCount";
 
     public Text progressText;
     public Text nextUpdateText;
@@ -61,10 +62,12 @@ public class DailyMissionPanel : UIBase
 
     private void OnVideoRewarded()
     {
+        OtherSdkManager.Instance.CustomEvent("dailytask_ad");
         if (IsClaimed() || GetVideoCount() >= RequiredVideoCount)
         {
             return;
         }
+        RecordAdRevenue(AdManager.Instance.GetJustNowAdRevenue());
         PlayerPrefs.SetInt(VideoCountKey, Mathf.Min(GetVideoCount() + 1, RequiredVideoCount));
         if (GetVideoCount() >= RequiredVideoCount)
         {
@@ -84,7 +87,7 @@ public class DailyMissionPanel : UIBase
         int videoCount = GetVideoCount();
         string DailyMissionEx2 = LanguageManager.Instance.GetText("DailyMissionEx2");
         string unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond_unit");
-        progressText.text = string.Format(DailyMissionEx2, RequiredVideoCount, $"{unit}{GoldReward / PlayerInfo.CurrencyUnitScale}", $"{videoCount}/{RequiredVideoCount}");
+        progressText.text = string.Format(DailyMissionEx2, RequiredVideoCount, $"{unit}{AdManager.Instance.ConvertGoldToLocalCurrency(GetGoldReward())}", $"{videoCount}/{RequiredVideoCount}");
         watchButton.UpdateAdsBtnState(!IsClaimed() && videoCount < RequiredVideoCount);
         RefreshNextUpdateTime();
     }
@@ -122,6 +125,8 @@ public class DailyMissionPanel : UIBase
         PlayerPrefs.SetString(DateKey, today);
         PlayerPrefs.SetInt(VideoCountKey, 0);
         PlayerPrefs.SetInt(ClaimedKey, 0);
+        PlayerPrefs.SetFloat(RevenueSumKey, 0f);
+        PlayerPrefs.SetInt(RevenueCountKey, 0);
         PlayerPrefs.Save();
         return true;
     }
@@ -136,6 +141,26 @@ public class DailyMissionPanel : UIBase
         return PlayerPrefs.GetInt(ClaimedKey, 0) != 0;
     }
 
+    public float GetGoldReward()
+    {
+        return GetGoldRewardInternal() / (float)PlayerInfo.CurrencyUnitScale;
+    }
+
+    private int GetGoldRewardInternal()
+    {
+        float averageRevenue = PlayerPrefs.GetInt(RevenueCountKey, 0) > 0
+            ? PlayerPrefs.GetFloat(RevenueSumKey, 0f) / PlayerPrefs.GetInt(RevenueCountKey, 0)
+            : 0.005f;
+        return Mathf.RoundToInt(averageRevenue * 100f * RequiredVideoCount * PlayerInfo.CurrencyUnitScale);
+    }
+
+    private void RecordAdRevenue(float revenue)
+    {
+        PlayerPrefs.SetFloat(RevenueSumKey, PlayerPrefs.GetFloat(RevenueSumKey, 0f) + revenue);
+        PlayerPrefs.SetInt(RevenueCountKey, PlayerPrefs.GetInt(RevenueCountKey, 0) + 1);
+        PlayerPrefs.Save();
+    }
+
     public void ClaimReward()
     {
         if (IsClaimed() || GetVideoCount() < RequiredVideoCount)
@@ -146,7 +171,7 @@ public class DailyMissionPanel : UIBase
         PlayerPrefs.SetInt(ClaimedKey, 1);
         List<ItemData> itemDatas = new List<ItemData>
         {
-            new ItemData(ItemType.GoldDui, GoldReward)
+            new ItemData(ItemType.GoldDui, GetGoldRewardInternal())
         };
         UIManager.Instance.OpenUI<GeneralRewardPanel2>(itemDatas);
         RefreshView();

@@ -124,6 +124,8 @@ public class GameLoadingPanel : UIBase
 
         yield return new WaitForSeconds(1.8f);
 
+        OtherSdkManager.Instance.CustomEvent("load_page_start");
+
         //4.游戏资源准备
         while (!GameManager.LoadABAsyncOK)
         {
@@ -154,6 +156,7 @@ public class GameLoadingPanel : UIBase
     }
     public override void Hide()
     {
+        OtherSdkManager.Instance.CustomEvent("load_page_end");
         base.Hide();
     }
 }

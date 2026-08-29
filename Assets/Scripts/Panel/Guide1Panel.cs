@@ -27,6 +27,7 @@ public class Guide1Panel : UIBase
             SnakeHeadView head = obj.GetComponentInChildren<SnakeHeadView>();
             head.GetComponent<Button>().onClick.Invoke();
             PlayerPrefs.SetString("Guide1Panel", "yes");
+            OtherSdkManager.Instance.CustomEvent("game_guide1");
             Hide();
         });
      

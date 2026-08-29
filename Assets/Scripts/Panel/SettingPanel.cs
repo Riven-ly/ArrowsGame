@@ -140,10 +140,10 @@ public class SettingPanel : UIBase
     
     public static void OpenPrivacyPolicy()
     {
-        Application.OpenURL("https://sites.google.com/view/happy-mahjong-rich-adventure");
+        Application.OpenURL("https://sites.google.com/view/snake-jam-rush");
     }
     public static void OpenTermsOfServic()
     {
-        Application.OpenURL("https://sites.google.com/view/happy-mahjong-rich-terms");
+        Application.OpenURL("https://sites.google.com/view/snake-term-ues");
     }
 }
