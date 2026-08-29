@@ -1,7 +1,9 @@
 using DG.Tweening;
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 using System.Collections;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -53,7 +55,7 @@ public class PlayerApiClient : MonoBehaviour
             osType = DeviceManager.GetOSType(),
             osVersion = DeviceManager.GetOSVersion(),
             appVersion = DeviceManager.GetAppVersion(),
-            countryCode = string.Empty
+            countryCode = GetCountryCode()
         };
 
         Action<PlayerRegisterData> registerSuccess = response =>
@@ -65,9 +67,18 @@ public class PlayerApiClient : MonoBehaviour
         StartCoroutine(Post<RegisterRequest, PlayerRegisterData>("/player/register", request, registerSuccess, onFailure));
     }
 
-    /// <summary>
-    /// 获取当前玩家的余额和基础信息。
-    /// </summary>
+    private string GetCountryCode()
+    {
+        try
+        {
+            return RegionInfo.CurrentRegion.TwoLetterISORegionName;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
     /// <param name="onSuccess">请求成功回调，返回玩家信息。</param>
     /// <param name="onFailure">请求失败回调，返回错误信息。</param>
     public void GetPlayerInfo(Action<PlayerInfoData> onSuccess, Action<string> onFailure = null)

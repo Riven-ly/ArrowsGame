@@ -166,7 +166,7 @@ public class GameScenePanel : UIBase
             PlayGuid();
         });
 
-        SurpriseRewardPanel.noThanksCount = 0;//关卡重置
+        //SurpriseRewardPanel.noThanksCount = 0;//关卡重置
 
         OtherSdkManager.Instance.CustomEvent("level_start", "level_id", GameManager.Instance.playerInfo.level);
     }
