@@ -19,7 +19,7 @@ public static class PortugueseLanguageConfig
         {"Continue", "Continuar"},
         {"RESET", "REPETIR"},
         {"OK", "OK"},
-        {"PrivacyPolicy", "Política de Privacidade"},
+        {"PrivacyPolicy", "Privacidade"},
         {"TermsofService", "Termos de Serviço"},
         {"SETTINGS", "CONFIGURAÇÕES"},
         //sceneitem
