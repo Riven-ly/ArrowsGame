@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Collections;
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.Networking;
 
