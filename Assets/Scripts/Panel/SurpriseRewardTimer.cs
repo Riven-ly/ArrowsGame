@@ -11,6 +11,7 @@ public class SurpriseRewardTimer : MonoBehaviour
     private bool rewardPending;
     private bool enabledForLevel;
 
+    private bool isFirstGame = false;
     private void Update()
     {
         if (!enabledForLevel || rewardPending)
@@ -29,7 +30,15 @@ public class SurpriseRewardTimer : MonoBehaviour
     {
         enabledForLevel = level > 2;
         elapsedTime = 0f;
-        nextRewardTime = firstRewardDelay;
+        if(!isFirstGame)
+        {
+            isFirstGame = true;
+            nextRewardTime = firstRewardDelay;
+        }
+        else
+        {
+            nextRewardTime = Random.Range(nextRewardMinDelay, nextRewardMaxDelay);
+        }
         rewardPending = false;
     }
 
